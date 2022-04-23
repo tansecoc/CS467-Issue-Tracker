@@ -1,0 +1,23 @@
+{
+  "name": "cs467-issue-tracker",
+  "version": "1.0.0",
+  "description": "",
+  "main": "dbcon.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/tansecoc/CS467-Issue-Tracker.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/tansecoc/CS467-Issue-Tracker/issues"
+  },
+  "homepage": "https://github.com/tansecoc/CS467-Issue-Tracker#readme",
+  "dependencies": {
+    "express": "^4.17.3",
+    "pg": "^8.7.3"
+  }
+}
