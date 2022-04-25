@@ -21,9 +21,9 @@ export default function Hero() {
             fontWeight={600}
             fontSize={{ base: '2xl', sm: '4xl', md: '6xl' }}
             lineHeight={'110%'}>
-            Boost your Productivity <br />
+            Boost your Productivity <br />with&nbsp; 
             <Text as={'span'} color={'green.400'}>
-              with Issue Tracker
+              Issue Tracker
             </Text>
           </Heading>
           <Text color={'gray.500'}>

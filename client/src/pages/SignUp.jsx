@@ -88,7 +88,7 @@ export default function SignupCard() {
               </Button>
             </Stack>
             <Text align={'center'}>
-                Already a user? <RouterLink to="/signin"><Text color={'green.400'}>Sign In</Text></RouterLink>
+                Already a user? <RouterLink to="/signin"><Text as="span" color={'green.400'}>Sign In</Text></RouterLink>
             </Text>
           </Stack>
         </Box>
