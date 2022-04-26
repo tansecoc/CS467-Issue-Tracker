@@ -6,7 +6,9 @@ import {
   Button,
   Stack,
 } from '@chakra-ui/react';
-import { Link } from 'react-router-dom';
+import { Link as RouterLink } from 'react-router-dom';
+
+import { Logo } from './Logo';
 
 export default function Hero() {
   return (
@@ -16,7 +18,9 @@ export default function Hero() {
           as={Box}
           textAlign={'center'}
           spacing={{ base: 8, md: 14 }}
-          py={{ base: 20, md: 36 }}>
+          pb={{ base: 20, md: 36 }}
+          >
+          <Logo />
           <Heading
             fontWeight={600}
             fontSize={{ base: '2xl', sm: '4xl', md: '6xl' }}
@@ -35,20 +39,19 @@ export default function Hero() {
             align={'center'}
             alignSelf={'center'}
             position={'relative'}>
-            <Button
-              colorScheme={'green'}
-              bg={'green.400'}
-              rounded={'full'}
-              px={6}
-              _hover={{
-                bg: 'green.500',
-              }}>
-              <Link to="/signup">Get Started</Link>
-            </Button>
-            <Button variant={'link'} colorScheme={'blue'} size={'sm'}>
-              <Link to="/signin">Sign In</Link>
-            </Button>
-          </Stack>
+            <RouterLink to="/signup">
+              <Button
+                colorScheme={'green'}
+                bg={'green.400'}
+                rounded={'full'}
+                px={6}
+                _hover={{
+                  bg: 'green.500',
+                }}>
+                Get Started Free
+              </Button>
+            </RouterLink>
+         </Stack>
         </Stack>
       </Container>
     </>

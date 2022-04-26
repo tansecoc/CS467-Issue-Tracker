@@ -12,7 +12,6 @@ import {
   Heading,
   Text,
   useColorModeValue,
-  Link,
 } from '@chakra-ui/react';
 import { useState } from 'react';
 import { ViewIcon, ViewOffIcon } from '@chakra-ui/icons';
@@ -36,6 +35,7 @@ export default function SignupCard() {
             to enjoy all of our cool features ✌️
           </Text>
         </Stack>
+
         <Box
           rounded={'lg'}
           bg={useColorModeValue('white', 'gray.700')}
@@ -56,10 +56,12 @@ export default function SignupCard() {
                 </FormControl>
               </Box>
             </HStack>
+
             <FormControl id="email" isRequired>
               <FormLabel>Email address</FormLabel>
               <Input type="email" />
             </FormControl>
+
             <FormControl id="password" isRequired>
               <FormLabel>Password</FormLabel>
               <InputGroup>
@@ -75,6 +77,7 @@ export default function SignupCard() {
                 </InputRightElement>
               </InputGroup>
             </FormControl>
+
             <Stack spacing={10} pt={2}>
               <Button
                 loadingText="Submitting"
@@ -87,6 +90,7 @@ export default function SignupCard() {
                 Sign up
               </Button>
             </Stack>
+
             <Text align={'center'}>
                 Already a user? <RouterLink to="/signin"><Text as="span" color={'green.400'}>Sign In</Text></RouterLink>
             </Text>

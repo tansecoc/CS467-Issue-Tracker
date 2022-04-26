@@ -1,10 +1,10 @@
 import Hero from '../components/Hero';
-import NavLoggedOut from '../components/NavLoggedOut';
+import PublicNav from '../components/PublicNav';
 
 let Home = () => {
   return (
     <>
-      <NavLoggedOut />
+      <PublicNav />
       <Hero />
     </>
   );
