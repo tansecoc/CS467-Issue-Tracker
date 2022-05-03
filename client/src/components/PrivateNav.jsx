@@ -22,8 +22,9 @@ import { useAuth } from '../auth/Auth';
 const Links = [{title: 'Dashboard', path: '/app'}, {title: 'Projects', path: '/app/projects'}, {title: 'Org', path: '/app/org'}];
 
 const NavLink = ({ children, path }) => (
-  <RouterLink to={path}>
   <Link
+    as={RouterLink}
+    to={path}
     px={2}
     py={1}
     rounded={'md'}
@@ -33,7 +34,6 @@ const NavLink = ({ children, path }) => (
     }}> 
     {children}
   </Link>
-  </RouterLink>
 );
 
 export default function PrivateNav() {

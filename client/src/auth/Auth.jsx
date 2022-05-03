@@ -1,38 +1,57 @@
 import React from 'react';
 import { useLocation, Navigate, Outlet } from 'react-router-dom';
 
-import { fakeAuthProvider } from './fakeAuthProvider';
+import { fakeAuthAPI } from './fakeAuthAPI';
 
 let AuthContext = React.createContext(null);
 
 export function AuthProvider({ children }) {
-  let [user, setUser] = React.useState(null);
+  let [user, setUser] = React.useState(localStorage.getItem('ITClient_User'));
 
-  let signin = (loginInfo, callback) => {
-    if (fakeAuthProvider.signin(loginInfo)) {
-      setUser(loginInfo);
-      callback();
-      return true;
-    }
-    return false;
+  const storeUser = (user) => {
+    localStorage.setItem('ITClient_User', user);
+    setUser(user);
   };
 
-  let signup = (newUser, callback) => {
-    if (fakeAuthProvider.signup(newUser.email)) {
-      setUser(newUser);
-      callback();
-      return true;
+  let signin = async (loginInfo, callback) => {
+    try {
+      const authorized = await fakeAuthAPI.signin(loginInfo);
+      if (authorized) {
+        storeUser(loginInfo);
+        callback();
+        return true;
+      }
     }
-    return false;
+    catch(err) {
+      console.error(err);
+    };
   };
 
-  let signout = (callback) => {
-    if (fakeAuthProvider.signout()) {
-      setUser(null);
-      callback();
-      return true;
+  let signup = async (newUser, callback) => {
+    try {
+      const authorized = await fakeAuthAPI.signup(newUser.email);
+      if (authorized) {
+        storeUser(newUser.email);
+        callback();
+        return true;
+      }
+      return false;
+    } catch(err) {
+      console.error(err);
     }
-    return false;
+  };
+
+  let signout = async (callback) => {
+    try {
+      if (await fakeAuthAPI.signout()) {
+        setUser(null);
+        localStorage.removeItem('ITClient_User');
+        callback();
+        return true;
+      }
+    } catch(err) {
+      console.error(err);
+    }
   };
 
   let value = { user, signin, signup, signout };
