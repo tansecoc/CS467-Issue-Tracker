@@ -16,7 +16,7 @@ import { Link as RouterLink, useNavigate, useLocation } from 'react-router-dom';
 
 import { useAuth } from '../auth/Auth';
 
-export default function SimpleCard() {
+export default function SignIn() {
   let navigate = useNavigate();
   let location = useLocation();
   let auth = useAuth();
@@ -62,45 +62,46 @@ export default function SimpleCard() {
             to enjoy all of our cool features ✌️
           </Text>
         </Stack>
-        <Box
-          rounded={'lg'}
-          bg={useColorModeValue('white', 'gray.700')}
-          boxShadow={'lg'}
-          p={8}>
-          <Stack spacing={4}>
-            <form onSubmit={handleSubmit}>
-            <FormControl id="email">
-              <FormLabel>Email address</FormLabel>
-              <Input type="email" value={email} onChange={(e) => setEmail(e.target.value)} />
-            </FormControl>
-            <FormControl id="password">
-              <FormLabel>Password</FormLabel>
-              <Input type="password" value={password} onChange={(e) => setPassword(e.target.value)}/>
-            </FormControl>
-            <Stack spacing={10}>
-              <Stack
-                direction={{ base: 'column', sm: 'row' }}
-                align={'start'}
-                justify={'space-between'}>
-                <Checkbox>Remember me</Checkbox>
-                {/* <Link color={'green.400'}>Forgot password?</Link> */}
-              </Stack>
-              <Button
-                bg={'green.400'}
-                color={'white'}
-                _hover={{
-                  bg: 'green.500',
-                }}
-                type={'submit'}>
-                Sign In
-              </Button>
-              <Text align={'center'}>
-                Don't have an account yet? <Text as="span" color={'green.400'}><RouterLink to="/signup">Sign Up</RouterLink></Text>
-              </Text>
+
+        <form onSubmit={handleSubmit}>
+          <Box
+            rounded={'lg'}
+            bg={useColorModeValue('white', 'gray.700')}
+            boxShadow={'lg'}
+            p={8}>
+            <Stack spacing={4}>
+                <FormControl id="email">
+                  <FormLabel>Email address</FormLabel>
+                  <Input type="email" value={email} onChange={(e) => setEmail(e.target.value)} />
+                </FormControl>
+                <FormControl id="password">
+                  <FormLabel>Password</FormLabel>
+                  <Input type="password" value={password} onChange={(e) => setPassword(e.target.value)}/>
+                </FormControl>
+                <Stack spacing={10}>
+                  <Stack
+                    direction={{ base: 'column', sm: 'row' }}
+                    align={'start'}
+                    justify={'space-between'}>
+                    <Checkbox>Remember me</Checkbox>
+                    {/* <Link color={'green.400'}>Forgot password?</Link> */}
+                  </Stack>
+                  <Button
+                    bg={'green.400'}
+                    color={'white'}
+                    _hover={{
+                      bg: 'green.500',
+                    }}
+                    type={'submit'}>
+                    Sign In
+                  </Button>
+                  <Text align={'center'}>
+                    Don't have an account yet? <Text as="span" color={'green.400'}><RouterLink to="/signup">Sign Up</RouterLink></Text>
+                  </Text>
+                </Stack>
             </Stack>
-            </form>
-          </Stack>
-        </Box>
+          </Box>
+        </form>
       </Stack>
     </Flex>
   );

@@ -8,21 +8,34 @@ let AuthContext = React.createContext(null);
 export function AuthProvider({ children }) {
   let [user, setUser] = React.useState(null);
 
-  let signin = (newUser, callback) => {
-    return fakeAuthProvider.signin(() => {
+  let signin = (loginInfo, callback) => {
+    if (fakeAuthProvider.signin(loginInfo)) {
+      setUser(loginInfo);
+      callback();
+      return true;
+    }
+    return false;
+  };
+
+  let signup = (newUser, callback) => {
+    if (fakeAuthProvider.signup(newUser.email)) {
       setUser(newUser);
       callback();
-    });
+      return true;
+    }
+    return false;
   };
 
   let signout = (callback) => {
-    return fakeAuthProvider.signout(() => {
+    if (fakeAuthProvider.signout()) {
       setUser(null);
       callback();
-    });
+      return true;
+    }
+    return false;
   };
 
-  let value = { user, signin, signout };
+  let value = { user, signin, signup, signout };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 }

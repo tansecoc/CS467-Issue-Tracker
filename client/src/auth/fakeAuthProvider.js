@@ -2,14 +2,24 @@
  * This represents some generic auth provider API, like Firebase.
  */
  const fakeAuthProvider = {
-  isAuthenticated: false,
-  signin(callback) {
+  signin(loginInfo) {
+    if (localStorage.getItem('userInfo') !== loginInfo) {
+      return false;
+    }
     fakeAuthProvider.isAuthenticated = true;
-    setTimeout(callback, 100); // fake async
+    setTimeout(() => {}, 100); // fake async
+    return true;
   },
-  signout(callback) {
+  signup(newUser) {
+    localStorage.setItem('userInfo', newUser);
+    fakeAuthProvider.isAuthenticated = true;
+    setTimeout(() => {}, 100); // fake async
+    return true;
+  },
+  signout() {
     fakeAuthProvider.isAuthenticated = false;
-    setTimeout(callback, 100);
+    setTimeout(() => {}, 100);
+    return true;
   },
 };
 
