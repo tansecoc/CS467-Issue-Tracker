@@ -159,8 +159,22 @@ const createPool = async () => {
 
 /* ------------- Begin Model Functions ------------- */
 
-const getUsers = async pool => {
+// const getUsers = async pool => {
+//     return await pool.select().from('users');
+// }
+
+async function getUsers(pool) {
     return await pool.select().from('users');
+}
+
+async function createOrg(pool, org_creator_id, org_name) {
+    await pool('organizations').insert({
+        org_creator_id: org_creator_id,
+        org_name: org_name,
+        org_create_date: (new Date()).toISOString().split('T')[0]
+    })
+
+    return true;
 }
 
 /* ------------- End Model Functions ------------- */
@@ -172,13 +186,24 @@ app.get('/', async (req, res) => {
 })
 
 app.get('/test_endpoint', async (req, res) => {
-  pool = await createPool();
-  let result = await getUsers(pool);
-  res.send(result).end();
+    pool = await createPool();
+    let result = await getUsers(pool);
+    res.send(result).end();
 })
 
-app.get('/org/create', async (req, res) => {
-    
+app.post('/org/create', async (req, res) => {
+    pool = await createPool(pool);
+    try {
+        let result = await createOrg(pool, req.body.org_creator_id, req.body.org_name);
+        res.send(result).end();
+
+    } catch (err) {
+        console.log(err);
+        res
+            .status(500)
+            .send(false)
+            .end();
+    }
 })
 
 /* ------------- End Controller Functions ------------- */
