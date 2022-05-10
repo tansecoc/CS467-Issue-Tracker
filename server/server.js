@@ -2,7 +2,6 @@
 
 // Require process, so we can mock environment variables.
 const process = require('process');
-
 const express = require('express');
 const Knex = require('knex');
 const fs = require('fs');
@@ -157,62 +156,25 @@ const createPool = async () => {
 };
 
 
-/* ------------- Begin Model Functions ------------- */
+// Routes
+const testRoute = require('./routes/testRoute');
+const orgs = require('./routes/orgs');
+const teams = require('./routes/teams');
+const projects = require('./routes/projects');
+const issues = require('./routes/issues');
 
-// const getUsers = async pool => {
-//     return await pool.select().from('users');
-// }
+app.use('/testRoute', testRoute);
+app.use('/orgs', orgs);
+app.use('/teams', teams);
+app.use('/projects', projects);
+app.use('/issues', issues);
 
-async function getUsers(pool) {
-    return await pool.select().from('users');
-}
-
-async function createOrg(pool, org_creator_id, org_name) {
-    await pool('organizations').insert({
-        org_creator_id: org_creator_id,
-        org_name: org_name,
-        org_create_date: (new Date()).toISOString().split('T')[0]
-    })
-
-    return true;
-}
-
-/* ------------- End Model Functions ------------- */
-
-/* ------------- Begin Controller Functions ------------- */
-
-app.get('/', async (req, res) => {
-    res.send('this is the backend server').end();
-})
-
-app.get('/test_endpoint', async (req, res) => {
-    pool = await createPool();
-    let result = await getUsers(pool);
-    res.send(result).end();
-})
-
-app.post('/org/create', async (req, res) => {
-    pool = await createPool(pool);
-    try {
-        let result = await createOrg(pool, req.body.org_creator_id, req.body.org_name);
-        res.send(result).end();
-
-    } catch (err) {
-        console.log(err);
-        res
-            .status(500)
-            .send(false)
-            .end();
-    }
-})
-
-/* ------------- End Controller Functions ------------- */
-
-
+// Start server
 const PORT = parseInt(process.env.PORT) || 8080;
 const server = app.listen(PORT, () => {
   console.log(`App listening on port ${PORT}`);
   console.log('Press Ctrl+C to quit.');
 });
 
-module.exports = server;
+// module.exports = server;
+module.exports.createPool = createPool;
