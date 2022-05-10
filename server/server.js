@@ -169,12 +169,14 @@ app.use('/teams', teams);
 app.use('/projects', projects);
 app.use('/issues', issues);
 
+
 // Start server
 const PORT = parseInt(process.env.PORT) || 8080;
 const server = app.listen(PORT, () => {
   console.log(`App listening on port ${PORT}`);
   console.log('Press Ctrl+C to quit.');
 });
+
 
 // module.exports = server;
 module.exports.createPool = createPool;
