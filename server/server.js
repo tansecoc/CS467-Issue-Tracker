@@ -5,6 +5,7 @@ const process = require('process');
 const express = require('express');
 const Knex = require('knex');
 const fs = require('fs');
+const cookieParser = require('cookie-parser');
 
 const app = express();
 app.enable('trust proxy');
@@ -13,6 +14,8 @@ app.enable('trust proxy');
 app.use(express.urlencoded({extended: false}));
 // This middleware is available in Express v4.16.0 onwards
 app.use(express.json());
+// Use for cookie setup and management
+app.use(cookieParser());
 
 // Set Content-Type for all responses for these routes.
 app.use((req, res, next) => {
@@ -156,7 +159,7 @@ const createPool = async () => {
 };
 
 
-// Routes
+// Routes for the API endpoints
 const testRoute = require('./routes/testRoute');
 const orgs = require('./routes/orgs');
 const users = require('./routes/users');
