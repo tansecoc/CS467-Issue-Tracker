@@ -34,7 +34,7 @@ async function obtainOrgData(pool, org_id) {
 /* ------------- Begin Controller Functions ------------- */
 
 // Validate user credentials, and send back user information and cookies
-router.get('/', async (req, res) => {
+router.post('/login', async (req, res) => {
     pool = await server.createPool();
     try {
         let email = req.body.email;
