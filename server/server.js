@@ -159,13 +159,13 @@ const createPool = async () => {
 // Routes
 const testRoute = require('./routes/testRoute');
 const orgs = require('./routes/orgs');
-const teams = require('./routes/teams');
+const users = require('./routes/users');
 const projects = require('./routes/projects');
 const issues = require('./routes/issues');
 
 app.use('/testRoute', testRoute);
 app.use('/orgs', orgs);
-app.use('/teams', teams);
+app.use('/users', users);
 app.use('/projects', projects);
 app.use('/issues', issues);
 
