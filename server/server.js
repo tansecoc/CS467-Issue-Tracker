@@ -1,7 +1,7 @@
 'use strict';
 
 // Require process, so we can mock environment variables.
-//const process = require('process');
+const process = require('process');
 require('dotenv').config();                     // for injecting local environment
 const express = require('express');
 const Knex = require('knex');
@@ -29,7 +29,7 @@ app.use(passport.session());
 
 // Set Content-Type for all responses for these routes.
 app.use((req, res, next) => {
-  res.set('Content-Type', 'text/html');
+  res.set('Content-Type', 'application/json');
   next();
 });
 
