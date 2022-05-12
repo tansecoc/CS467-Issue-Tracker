@@ -6,14 +6,11 @@ require('dotenv').config();                     // for injecting local environme
 const express = require('express');
 const Knex = require('knex');
 const fs = require('fs');
+const cookieParser = require('cookie-parser');
 
 // Used for user auth
 const passport = require('passport');
 const session = require('express-session');
-const bcrypt = require('bcrypt');
-const cookieParser = require('cookie-parser');
-const uuidv4 = require('uuid/v4');
-
 
 const app = express();
 app.enable('trust proxy');
@@ -24,6 +21,11 @@ app.use(express.urlencoded({extended: false}));
 app.use(express.json());
 // Use for cookie setup and management
 app.use(cookieParser());
+
+////////////////////////////////////////////////
+app.use(session({secret: 'keyboard cat'}))
+app.use(passport.initialize());
+app.use(passport.session());
 
 // Set Content-Type for all responses for these routes.
 app.use((req, res, next) => {
