@@ -4,12 +4,6 @@ const router = Router();
 
 /* ------------- Begin Model Functions ------------- */
 
-function validateCookie(req, res, next) {
-    const { cookies } = req;
-    console.log(cookies);
-    next();
-}
-
 async function obtainUserData(pool, email) {
     userData = await pool
     .select()
