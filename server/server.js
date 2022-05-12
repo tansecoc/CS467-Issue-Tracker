@@ -1,11 +1,19 @@
 'use strict';
 
 // Require process, so we can mock environment variables.
-const process = require('process');
+//const process = require('process');
+require('dotenv').config();                     // for injecting local environment
 const express = require('express');
 const Knex = require('knex');
 const fs = require('fs');
+
+// Used for user auth
+const passport = require('passport');
+const session = require('express-session');
+const bcrypt = require('bcrypt');
 const cookieParser = require('cookie-parser');
+const uuidv4 = require('uuid/v4');
+
 
 const app = express();
 app.enable('trust proxy');
