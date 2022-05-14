@@ -2,16 +2,15 @@
 
 // Require process, so we can mock environment variables.
 const process = require('process');
-require('dotenv').config();                     // for injecting local environment
 const express = require('express');
 const Knex = require('knex');
 const fs = require('fs');
 const cookieParser = require('cookie-parser');
-
-// Used for user auth
-const passport = require('passport');
 const session = require('express-session');
+const pgSession = require('connect-pg-simple')(session);
+const passport = require('passport');
 
+require('dotenv').config();                     // for injecting local environment
 const app = express();
 app.enable('trust proxy');
 
@@ -22,10 +21,6 @@ app.use(express.json());
 // Use for cookie setup and management
 app.use(cookieParser());
 
-////////////////////////////////////////////////
-app.use(session({secret: 'keyboard cat'}))
-app.use(passport.initialize());
-app.use(passport.session());
 
 // Set Content-Type for all responses for these routes.
 app.use((req, res, next) => {
@@ -176,6 +171,26 @@ const users = require('./routes/users');
 const projects = require('./routes/projects');
 const issues = require('./routes/issues');
 
+
+// Session Setup
+app.use(session({
+  secret: process.env.SECRET,
+  resave: false,
+  saveUninitialized: true,
+  cookie: {maxAge: 10 * 24 * 60 * 60 * 1000},  // 10 days
+  store: new pgSession({
+      pool: pool,
+      tableName: 'user_sessions',
+      createTableIfMissing: true
+  })
+}))
+
+
+// Passport
+app.use(passport.initialize());
+app.use(passport.session());
+
+// Routes
 app.use('/testRoute', testRoute);
 app.use('/orgs', orgs);
 app.use('/users', users);
@@ -192,4 +207,5 @@ const server = app.listen(PORT, () => {
 
 
 // module.exports = server;
-module.exports.createPool = createPool;
+// module.exports.createPool = createPool;
+module.exports = pool;
