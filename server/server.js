@@ -19,7 +19,6 @@ app.use(cookieParser());
 
 // Set Content-Type for all responses for these routes.
 app.use((req, res, next) => {
-  // res.set('Content-Type', 'application/json');
   res.setHeader('Content-Type', 'application/json');
   next();
 });

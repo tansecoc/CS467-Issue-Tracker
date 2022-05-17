@@ -53,8 +53,8 @@ router.post('/login', async (req, res) => {
             res.status(400).json({ msg: 'Bad request.' });
         }
     } catch (err) {
-    console.log(err);
-    res.status(500).send(false).end();
+        console.log(err);
+        res.status(500).send(false).end();
     }
 })
 
