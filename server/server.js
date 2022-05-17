@@ -6,6 +6,8 @@ const express = require('express');
 const Knex = require('knex');
 const fs = require('fs');
 const cookieParser = require('cookie-parser');
+const path = require('path');
+
 
 const app = express();
 app.enable('trust proxy');
@@ -17,11 +19,13 @@ app.use(express.json());
 // Use for cookie setup and management
 app.use(cookieParser());
 
+app.use(express.static(path.join(__dirname, "client", "build")));
+
 // Set Content-Type for all responses for these routes.
-app.use((req, res, next) => {
-  res.set('Content-Type', 'text/html');
-  next();
-});
+// app.use((req, res, next) => {
+//   res.set('Content-Type', 'text/html');
+//   next();
+// });
 
 // Create a Winston logger that streams to Stackdriver Logging.
 const winston = require('winston');
@@ -166,12 +170,16 @@ const users = require('./routes/users');
 const projects = require('./routes/projects');
 const issues = require('./routes/issues');
 
-app.use('/testRoute', testRoute);
-app.use('/orgs', orgs);
-app.use('/users', users);
-app.use('/projects', projects);
-app.use('/issues', issues);
+app.use('/api/testRoute', testRoute);
+app.use('/api/orgs', orgs);
+app.use('/api/users', users);
+app.use('/api/projects', projects);
+app.use('/api/issues', issues);
 
+// All other GET requests not handled before will return our React app
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, "client", "build", "index.html"));
+});
 
 // Start server
 const PORT = parseInt(process.env.PORT) || 8080;
