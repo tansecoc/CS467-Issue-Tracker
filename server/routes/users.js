@@ -4,12 +4,6 @@ const router = Router();
 
 /* ------------- Begin Model Functions ------------- */
 
-function validateCookie(req, res, next) {
-    const { cookies } = req;
-    console.log(cookies);
-    next();
-}
-
 async function obtainUserData(pool, email) {
     userData = await pool
     .select()
@@ -59,8 +53,8 @@ router.post('/login', async (req, res) => {
             res.status(400).json({ msg: 'Bad request.' });
         }
     } catch (err) {
-    console.log(err);
-    res.status(500).send(false).end();
+        console.log(err);
+        res.status(500).send(false).end();
     }
 })
 
