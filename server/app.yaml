@@ -1,4 +1,5 @@
 runtime: nodejs14
+service: default
 
 # The following env variables may contain sensitive information that grants
 # anyone access to your database. Do not add this file to your source control.
