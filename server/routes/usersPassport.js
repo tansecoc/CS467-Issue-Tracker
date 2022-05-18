@@ -1,19 +1,9 @@
-const server = require('../server.js');
-const { Router } = require('express');
-const router = Router();
-const bcrypt = require('bcrypt');
+const router = require('express').Router();
 const passport = require('passport');
-const LocalStrategy = require('passport-local');
-require('../passport.js')(passport, LocalStrategy, server, bcrypt);
-const saltRounds = 10;
+const bcrypt = require('bcrypt');
+let pool = require('../config/database');
 
 /* ------------- Begin Model Functions ------------- */
-
-function validateCookie(req, res, next) {
-    const { cookies } = req;
-    console.log(cookies);
-    next();
-}
 
 async function obtainUserData(pool, email) {
     userData = await pool
@@ -44,40 +34,26 @@ async function createUser(pool, req, hashedPwd){
 
 /* ------------- Begin Controller Functions ------------- */
 
-// Test endpoints
-router.get('/', async (req, res) => {
-    res.status(200).json({msg: "got it"})
-})
-
-router.post('/testlogin', passport.authenticate('local', {
-    successReturnToOrRedirect: '/users',
-    failureRedirect: '/losers',
-    failureMessage: true
-}))
 
 // Creates new user account 
 router.post('/', async (req, res) => {
-    pool = await server.createPool();
     try {
         let firstName = req.body.first_name
         let lastName = req.body.last_name
-        let email = req.body.email;
+        let email = req.body.username;
         let password = req.body.password;
 
         // Checks if all fields of form are filled out
         if (firstName && lastName && email && password){
-            // Creates SALT
-            bcrypt.genSalt(saltRounds, function(err, salt) {
-                // Hashes password
-                bcrypt.hash(password, salt, function(err, hash) {
-                    // Creates user with hashed password
-                    createUser(pool, req, hash)
-                    .then(result => {
-                        res.status(201).send(true).end()
-                    })
-                });
-            });
-        } else{
+            bcrypt.hash(password, 10, function(err, hash){
+                pool('users').insert(
+                    {user_first_name: firstName, user_last_name: lastName, user_email: email, user_password_hash: hash}
+                )
+                .then(result => {
+                    res.status(201).send(true).end()
+                })
+            })
+        } else {
             res.status(400).json({ msg: 'Bad request.' });
         }
     } catch (err) {
@@ -88,7 +64,6 @@ router.post('/', async (req, res) => {
 
 // Validate user credentials, and send back user information and cookies
 router.post('/login', async (req, res) => {
-    pool = await server.createPool();
     try {
         let email = req.body.email;
         let password = req.body.password;

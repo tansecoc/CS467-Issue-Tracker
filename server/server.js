@@ -33,15 +33,8 @@ app.use(session({
   resave: false,
   saveUninitialized: true,
   cookie: {maxAge: 10 * 24 * 60 * 60 * 1000},  // 10 days
-  // // PG Sesssion set up
-  // store: new pgSession({
-  //     pool: pool,
-  //     tableName: 'user_sessions',
-  //     createTableIfMissing: true
-  // })
   store: new knexSession({
       knex: pool,
-      tableName: 'user_sessions_knex',
       createTable: true
   })
 }));
@@ -58,7 +51,6 @@ app.use(passport.session());
 // const users = require('./routes/users');
 // const projects = require('./routes/projects');
 // const issues = require('./routes/issues');
-const test = require('./routes/test');
 
 
 // // Routes
@@ -67,7 +59,8 @@ const test = require('./routes/test');
 // app.use('/users', users);
 // app.use('/projects', projects);
 // app.use('/issues', issues);
-app.use('/', test)
+app.use('/', require('./routes/test'));
+app.use('/users', require('./routes/usersPassport'))
 
 
 // Start server
