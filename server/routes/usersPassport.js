@@ -23,12 +23,6 @@ async function obtainOrgData(pool, org_id) {
     return orgData[0];
 }
 
-async function createUser(pool, req, hashedPwd){
-    return await pool('users').insert(
-        {user_first_name: req.body.first_name, user_last_name: req.body.last_name, user_email: req.body.email, user_password_hash: hashedPwd}
-    )
-}
-
 /* ------------- End Model Functions ------------- */
 
 
