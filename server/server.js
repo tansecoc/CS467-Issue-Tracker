@@ -41,14 +41,14 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 app.use((req, res, next) => {
-  res.setHeader('Content-Type', 'application/json');
+  // res.setHeader('Content-Type', 'application/json');
   next();
 });
 
 // Routes for the API endpoints
 const testRoute = require('./routes/testRoute');
 const orgs = require('./routes/orgs');
-const users = require('./routes/users');
+const users = require('./routes/usersPassport');
 const projects = require('./routes/projects');
 const issues = require('./routes/issues');
 
