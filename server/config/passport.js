@@ -1,6 +1,6 @@
 const passport = require('passport');
 const LocalStrategy = require('passport-local').Strategy;
-const poolPromise = require('./database');
+const pool = require('./database');
 const passwordUtils = require('../lib/passwordUtils');
 
 //TODO
