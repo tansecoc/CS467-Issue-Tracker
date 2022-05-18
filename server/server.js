@@ -57,7 +57,7 @@ app.use('/api/orgs', orgs);
 app.use('/api/users', users);
 app.use('/api/projects', projects);
 app.use('/api/issues', issues);
-app.use('/', require('./routes/test'));
+app.use('/test', require('./routes/test'));
 
 // All other GET requests not handled before will return our React app
 app.get('*', (req, res) => {
