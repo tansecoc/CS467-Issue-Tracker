@@ -60,7 +60,7 @@ app.use(passport.session());
 // app.use('/projects', projects);
 // app.use('/issues', issues);
 app.use('/', require('./routes/test'));
-app.use('/users', require('./routes/usersPassport'))
+// app.use('/users', require('./routes/usersPassport'))
 
 
 // Start server

@@ -6,6 +6,7 @@ env_variables:
   DB_USER: postgres
   DB_PASS: bennythebeaver
   DB_NAME: postgres
+  SECRET: thisisasecret
   # e.g. my-awesome-project:us-central1:my-cloud-sql-instance
   INSTANCE_CONNECTION_NAME: cs467-issue-tracker:us-central1:cs467-issue-tracker-db2
 
