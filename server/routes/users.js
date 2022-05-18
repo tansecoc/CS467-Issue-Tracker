@@ -1,6 +1,7 @@
-const server = require('../server.js');
-const { Router } = require('express');
-const router = Router();
+const router = require('express').Router();
+const passport = require('passport');
+const bcrypt = require('bcrypt');
+let pool = require('../config/database');
 
 /* ------------- Begin Model Functions ------------- */
 
@@ -27,9 +28,36 @@ async function obtainOrgData(pool, org_id) {
 
 /* ------------- Begin Controller Functions ------------- */
 
+
+// Creates new user account 
+router.post('/', async (req, res) => {
+    try {
+        let firstName = req.body.first_name
+        let lastName = req.body.last_name
+        let email = req.body.username;
+        let password = req.body.password;
+
+        // Checks if all fields of form are filled out
+        if (firstName && lastName && email && password){
+            bcrypt.hash(password, 10, function(err, hash){
+                pool('users').insert(
+                    {user_first_name: firstName, user_last_name: lastName, user_email: email, user_password_hash: hash}
+                )
+                .then(result => {
+                    res.status(201).send(true).end()
+                })
+            })
+        } else {
+            res.status(400).json({ msg: 'Bad request.' });
+        }
+    } catch (err) {
+        console.log(err);
+        res.status(500).send(false).end();
+    }
+})
+
 // Validate user credentials, and send back user information and cookies
 router.post('/login', async (req, res) => {
-    pool = await server.createPool();
     try {
         let email = req.body.email;
         let password = req.body.password;
