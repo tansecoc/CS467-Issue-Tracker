@@ -1,7 +1,7 @@
 const process = require('process');
 const Knex = require('knex');
 const fs = require('fs');
-require('dotenv').config()
+//require('dotenv').config()
 
 
 // Create a Winston logger that streams to Stackdriver Logging.

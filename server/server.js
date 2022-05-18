@@ -9,7 +9,7 @@ const passport = require('passport');
 const pool = require('./config/database');
 
 require('./config/passport')
-require('dotenv').config();                     // for injecting local environment
+//require('dotenv').config();                     // for injecting local environment
 
 const app = express();
 app.enable('trust proxy');
