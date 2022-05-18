@@ -8,7 +8,7 @@ const knexSession = require('connect-session-knex')(session);
 const passport = require('passport');
 const pool = require('./config/database');
 require('./config/passport')
-//require('dotenv').config();                     // for injecting local environment
+require('dotenv').config();                     // for injecting local environment
 const path = require('path');
 
 const app = express();
@@ -41,14 +41,14 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 app.use((req, res, next) => {
-  res.setHeader('Content-Type', 'application/json');
+  // res.setHeader('Content-Type', 'application/json');
   next();
 });
 
 // Routes for the API endpoints
 const testRoute = require('./routes/testRoute');
 const orgs = require('./routes/orgs');
-const users = require('./routes/users');
+const users = require('./routes/usersPassport');
 const projects = require('./routes/projects');
 const issues = require('./routes/issues');
 
