@@ -1,13 +1,13 @@
 const passport = require('passport');
 const LocalStrategy = require('passport-local').Strategy;
-const pool = require('../server');
+const poolPromise = require('./database');
 const passwordUtils = require('../lib/passwordUtils');
 
 //TODO
 passport.use(new LocalStrategy(function(username, password, cb) {
     try{
         //pool.query(`SELECT * FROM users WHERE user_email='${username}'`)
-        pool.select().from('users').where('user_email', email)
+        pool.select().from('users').where('user_email', username)
         .then((results) => {
             let user = results.rows[0];
             if (typeof user == null || typeof user == undefined){
@@ -25,7 +25,7 @@ passport.use(new LocalStrategy(function(username, password, cb) {
         })
         .catch((err) => {   
             cb(err);
-        });
+        })
     } catch(err){
         throw(err)
     }
@@ -36,7 +36,8 @@ passport.serializeUser(function(user, cb) {
 });
 
 passport.deserializeUser(function(user_id, cb) {
-    pool.query(`SELECT * FROM users WHERE user_id='${user_id}'`)
+    //pool.query(`SELECT * FROM users WHERE user_id='${user_id}'`)
+    pool.select().from('users').where('user_id', user_id)
     .then(user =>{
         cb(null, user)
     })
