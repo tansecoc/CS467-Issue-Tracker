@@ -9,7 +9,6 @@ const passport = require('passport');
 const pool = require('./config/database');
 require('./config/passport')
 const path = require('path');
-
 const fs= require("fs");
 if (fs.existsSync('./.env')) {
     require('dotenv').config(); // for injecting local environment
@@ -50,11 +49,11 @@ app.use((req, res, next) => {
 });
 
 // Routes for the API endpoints
-app.use('/api/testRoute', './routes/testRoute');
-app.use('/api/orgs', './routes/orgs');
-app.use('/api/users', './routes/users');
-app.use('/api/projects', './routes/projects');
-app.use('/api/issues', './routes/issues');
+app.use('/api/testRoute', require('./routes/testRoute'));
+app.use('/api/orgs', require('./routes/orgs'));
+app.use('/api/users', require('./routes/users'));
+app.use('/api/projects', require('./routes/projects'));
+app.use('/api/issues', require('./routes/issues'));
 app.use('/test', require('./routes/test'));
 
 // All other GET requests not handled before will return our React app
