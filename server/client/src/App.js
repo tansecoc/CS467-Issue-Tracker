@@ -9,6 +9,7 @@ import SignUp from './pages/SignUp';
 import Layout from './components/Layout';
 import { Routes, Route } from 'react-router-dom';
 import { AuthProvider, RequireAuth, RequireUnauth } from './auth/Auth';
+import { RequireOrg } from './components/RequireOrg';
 import Org from './pages/Org';
 
 function App() {
@@ -23,8 +24,10 @@ function App() {
           </Route>
           <Route path="app" element={<RequireAuth><Layout /></RequireAuth>}>
             <Route path="org" element={<Org />} />
-            <Route path="projects" />
-            <Route path="issues" />
+            <Route element={<RequireOrg />}>
+              <Route path="projects" />
+              <Route path="issues" />
+            </Route>
           </Route>
         </Routes>
         </AuthProvider>
