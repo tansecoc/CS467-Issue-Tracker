@@ -49,17 +49,11 @@ app.use((req, res, next) => {
 });
 
 // Routes for the API endpoints
-const testRoute = require('./routes/testRoute');
-const orgs = require('./routes/orgs');
-const users = require('./routes/users');
-const projects = require('./routes/projects');
-const issues = require('./routes/issues');
-
-app.use('/api/testRoute', testRoute);
-app.use('/api/orgs', orgs);
-app.use('/api/users', users);
-app.use('/api/projects', projects);
-app.use('/api/issues', issues);
+app.use('/api/testRoute', './routes/testRoute');
+app.use('/api/orgs', './routes/orgs');
+app.use('/api/users', './routes/users');
+app.use('/api/projects', './routes/projects');
+app.use('/api/issues', './routes/issues');
 app.use('/test', require('./routes/test'));
 
 // All other GET requests not handled before will return our React app
