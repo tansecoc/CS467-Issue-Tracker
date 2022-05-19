@@ -9,6 +9,7 @@ const passport = require('passport');
 const pool = require('./config/database');
 require('./config/passport')
 const path = require('path');
+
 const fs= require("fs");
 if (fs.existsSync('./.env')) {
     require('dotenv').config(); // for injecting local environment
