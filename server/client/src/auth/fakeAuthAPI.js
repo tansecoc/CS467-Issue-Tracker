@@ -5,7 +5,7 @@
   signin(user) {
     return new Promise((resolve, reject) => {
       setTimeout(() => {
-        if (!JSON.parse(localStorage.getItem('ITServer_Users').includes(user))
+        if (!JSON.parse(localStorage.getItem('ITServer_Users')?.includes(user))
         ) {
           reject(new Error('Invalid email or password.'));
         }
@@ -17,7 +17,7 @@
     return new Promise((resolve, reject) => {
       setTimeout(() => {
         let users = JSON.parse(localStorage.getItem('ITServer_Users'));
-        if (users.includes(newUser)) {
+        if (users?.includes(newUser)) {
           reject(new Error('An account already exists for this email.'));
         } else if (Array.isArray(users)) {
           users.push(newUser);
