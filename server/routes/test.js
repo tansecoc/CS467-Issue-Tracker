@@ -9,7 +9,7 @@ router.get('/', (req, res, next) => {
 });
 
 router.get('/login', (req, res, next) => {
-    const form = '<h1>Login Page</h1><form method="POST" action="/login">\
+    const form = '<h1>Login Page</h1><form method="POST" action="/test/login">\
     Enter Username:<br><input type="text" name="username">\
     <br>Enter Password:<br><input type="password" name="password">\
     <br><br><input type="submit" value="Submit"></form>';
@@ -50,7 +50,7 @@ router.get('/logout', (req, res, next) => {
     res.clearCookie('user_id');
     res.clearCookie('org_id');
     req.logout();
-    res.redirect('/login');
+    res.redirect('/test/login');
 });
 
 router.get('/login-success', (req, res, next) => {
