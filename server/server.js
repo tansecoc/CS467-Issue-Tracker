@@ -8,8 +8,11 @@ const knexSession = require('connect-session-knex')(session);
 const passport = require('passport');
 const pool = require('./config/database');
 require('./config/passport')
-// require('dotenv').config();                     // for injecting local environment
 const path = require('path');
+const fs= require("fs");
+if (fs.existsSync('./.env')) {
+    require('dotenv').config(); // for injecting local environment
+}
 
 const app = express();
 app.enable('trust proxy');
