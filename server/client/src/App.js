@@ -10,6 +10,7 @@ import Layout from './components/Layout';
 import { Routes, Route } from 'react-router-dom';
 import { AuthProvider, RequireAuth, RequireUnauth } from './auth/Auth';
 import Org from './pages/Org';
+import Projects from './pages/Projects';
 
 function App() {
   return (
@@ -23,7 +24,7 @@ function App() {
           </Route>
           <Route path="app" element={<RequireAuth><Layout /></RequireAuth>}>
             <Route path="org" element={<Org />} />
-            <Route path="projects" />
+            <Route path="projects" element={<Projects />} />
             <Route path="issues" />
           </Route>
         </Routes>
