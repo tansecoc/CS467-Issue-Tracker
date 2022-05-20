@@ -11,12 +11,12 @@ export function Table({ projectsList }) {
           <Tr>
             <Th fontSize={15}>Project Name</Th>
             <Th>Description</Th>
-            <Th>Open Issues</Th>
-            <Th>Closed Issues</Th>
+            <Th isNumeric>Open Issues</Th>
+            <Th isNumeric>Closed Issues</Th>
           </Tr>
         </Thead>
         <Tbody>
-          {projectsList.map(project => <Project {...project} />)}
+          {projectsList.map(project => <Project key={project.id} {...project} />)}
         </Tbody>
       </Tbl>
     </TableContainer>
