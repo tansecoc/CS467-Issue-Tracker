@@ -5,8 +5,7 @@
   signin(user) {
     return new Promise((resolve, reject) => {
       setTimeout(() => {
-        if (!JSON.parse(localStorage.getItem('ITServer_Users')?.includes(user))
-        ) {
+        if (!JSON.parse(localStorage.getItem('ITServer_Users'))?.includes(user)) {
           reject(new Error('Invalid email or password.'));
         }
         resolve(true); // fake async
