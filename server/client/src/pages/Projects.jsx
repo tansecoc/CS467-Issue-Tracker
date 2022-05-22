@@ -1,23 +1,20 @@
-import { Table } from '../components/Table';
+import { useEffect, useState } from 'react';
 
-let projects = [
-  {
-    id: 0,
-    name: 'ExampleProject1',
-    description: 'We are going to build something amazing!',
-    openIssues: 1,
-    closedIssues: 9
-  },
-  {
-    id: 1,
-    name: 'ExampleProject2',
-    description: 'Solving big other issues',
-    openIssues: 2,
-    closedIssues: 14
-  } 
-];
+import { Table } from '../components/Table';
+import { fakeAuthAPI } from '../auth/fakeAuthAPI';
 
 export default function Projects() {
+  const [projects, setProjects] = useState([]);
+
+  useEffect(() => {
+    async function fetchData() {
+      const projects = await fakeAuthAPI.get_projects();
+      console.log(projects);
+      setProjects(projects);
+    }
+    fetchData();
+  }, []);
+  
   return (
     <Table projectsList={projects}></Table>
   )
