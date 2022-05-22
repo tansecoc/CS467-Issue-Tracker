@@ -56,5 +56,15 @@ export const fakeAuthAPI = {
         resolve(projects);
       }, 250); // fake async
     });
+  },
+  get_issues() {
+    return new Promise((resolve) => {
+      setTimeout(() => {
+        const issues = [
+          
+        ];
+        resolve(issues);
+      }, 250); // fake async
+    });
   }
 };
