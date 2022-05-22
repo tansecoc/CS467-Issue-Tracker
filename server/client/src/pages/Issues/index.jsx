@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 
-import { Table } from '../components/Table';
-import { fakeAuthAPI } from '../auth/fakeAuthAPI';
+import { Table } from '../Projects/Table';
+import { fakeAuthAPI } from '../../auth/fakeAuthAPI';
 
 export default function Projects() {
   const [issues, setIssues] = useState([]);
@@ -15,6 +15,6 @@ export default function Projects() {
   }, []);
   
   return (
-    <Table projectsList={issues}></Table>
+    <Table data={issues}></Table>
   )
 }

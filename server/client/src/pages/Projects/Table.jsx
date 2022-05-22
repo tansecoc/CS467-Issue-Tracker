@@ -2,11 +2,11 @@ import { TableContainer, Table as Tbl, TableCaption, Thead, Tbody, Tr, Th } from
 
 import { Project } from './Project';
 
-export function Table({ projectsList }) {
+export function Table({ data }) {
   return (
     <TableContainer marginTop={10}>
       <Tbl variant='simple'>
-        <TableCaption>Projects within Organization</TableCaption>
+        <TableCaption>Issues Tracker</TableCaption>
         <Thead>
           <Tr>
             <Th fontSize={15}>Project Name</Th>
@@ -16,7 +16,7 @@ export function Table({ projectsList }) {
           </Tr>
         </Thead>
         <Tbody>
-          {projectsList.map(project => <Project key={project.id} {...project} />)}
+          {data.map(project => <Project key={project.id} {...project} />)}
         </Tbody>
       </Tbl>
     </TableContainer>
