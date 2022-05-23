@@ -21,9 +21,9 @@ function App() {
             <Route path="signin" element={<Pages.SignIn />} />
           </Route>
           <Route path="app" element={<RequireAuth><Layout /></RequireAuth>}>
-            <Route path="org" element={<Pages.Issues />} />
+            <Route path="org" element={<Pages.Org />} />
             <Route path="projects" element={<Pages.Projects />} />
-            <Route path="issues" />
+            <Route path="project/:id" element={<Pages.Issues />} />
           </Route>
         </Routes>
         </AuthProvider>

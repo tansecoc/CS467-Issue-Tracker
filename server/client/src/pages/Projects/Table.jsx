@@ -6,7 +6,6 @@ export function Table({ data }) {
   return (
     <TableContainer marginTop={10}>
       <Tbl variant='simple'>
-        <TableCaption>Issues Tracker</TableCaption>
         <Thead>
           <Tr>
             <Th fontSize={15}>Project Name</Th>

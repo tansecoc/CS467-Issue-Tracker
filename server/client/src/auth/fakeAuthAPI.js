@@ -57,11 +57,28 @@ export const fakeAuthAPI = {
       }, 250); // fake async
     });
   },
-  get_issues() {
+  get_issues(projectId) {
     return new Promise((resolve) => {
       setTimeout(() => {
         const issues = [
-          
+          {
+            id: 0,
+            title: 'Home page error',
+            type: 'Bug',
+            priority: 'High',
+            status: 'Open',
+            dueDate: '06/12/22',
+            assignee: 'Kevin Gilpin'
+          },
+          {
+            id: 1,
+            title: 'Create new signup page',
+            type: 'Task',
+            priority: 'Med',
+            status: 'Open',
+            dueDate: '06/28/22',
+            assignee: 'Kevin Gilpin'
+          }  
         ];
         resolve(issues);
       }, 250); // fake async
