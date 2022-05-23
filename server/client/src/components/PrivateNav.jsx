@@ -19,7 +19,7 @@ import { HamburgerIcon, CloseIcon } from '@chakra-ui/icons';
 import { useNavigate, Link as RouterLink } from 'react-router-dom';
 import { useAuth } from '../auth/Auth';
 
-const Links = [{title: 'Dashboard', path: '/app'}, {title: 'Projects', path: '/app/projects'}, {title: 'Org', path: '/app/org'}];
+const Links = [{title: 'Dashboard', path: '/app'}, {title: 'Projects', path: '/app/projects'}];
 
 const NavLink = ({ children, path }) => (
   <Link
@@ -79,8 +79,7 @@ export default function PrivateNav() {
                 />
               </MenuButton>
               <MenuList>
-                <MenuItem>Link 1</MenuItem>
-                <MenuItem>Link 2</MenuItem>
+                <MenuItem onClick={() => navigate('/app/org')}>My Org</MenuItem>
                 <MenuDivider />
                 <MenuItem onClick={() => {
           auth.signout(() => navigate("/"));
