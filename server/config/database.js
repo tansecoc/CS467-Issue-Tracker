@@ -1,8 +1,9 @@
 const process = require('process');
 const Knex = require('knex');
 const fs = require('fs');
-//require('dotenv').config()
-
+if (fs.existsSync('./.env')) {
+    require('dotenv').config(); // for injecting local environment
+}
 
 // Create a Winston logger that streams to Stackdriver Logging.
 const winston = require('winston');

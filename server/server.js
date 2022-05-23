@@ -7,8 +7,12 @@ const knexSession = require('connect-session-knex')(session);
 const passport = require('passport');
 const pool = require('./config/database');
 require('./config/passport')
-//require('dotenv').config();                     // for injecting local environment
+
 const path = require('path');
+const fs= require("fs");
+if (fs.existsSync('./.env')) {
+    require('dotenv').config(); // for injecting local environment
+}
 
 const app = express();
 app.enable('trust proxy');
@@ -45,17 +49,11 @@ app.use((req, res, next) => {
 });
 
 // Routes for the API endpoints
-const testRoute = require('./routes/testRoute');
-const orgs = require('./routes/orgs');
-const users = require('./routes/users');
-const projects = require('./routes/projects');
-const issues = require('./routes/issues');
-
-app.use('/api/testRoute', testRoute);
-app.use('/api/orgs', orgs);
-app.use('/api/users', users);
-app.use('/api/projects', projects);
-app.use('/api/issues', issues);
+app.use('/api/testRoute', require('./routes/testRoute'));
+app.use('/api/orgs', require('./routes/orgs'));
+app.use('/api/users', require('./routes/users'));
+app.use('/api/projects', require('./routes/projects'));
+app.use('/api/issues', require('./routes/issues'));
 app.use('/test', require('./routes/test'));
 
 // All other GET requests not handled before will return our React app
