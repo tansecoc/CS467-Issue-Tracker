@@ -26,8 +26,8 @@ function App() {
             <Route path="project/:id" element={<Pages.Issues />} />
           </Route>
         </Routes>
-        </AuthProvider>
-      </ChakraProvider>
+      </AuthProvider>
+    </ChakraProvider>
   );
 }
 

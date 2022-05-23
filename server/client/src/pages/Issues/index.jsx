@@ -18,7 +18,7 @@ export default function Projects() {
       setIssues(issuesData);
     }
     fetchData();
-  }, []);
+  }, [projectId]);
   
   return (
     <>
