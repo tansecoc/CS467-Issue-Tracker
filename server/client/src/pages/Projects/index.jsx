@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 
-import { Table } from './Table';
+import { ProjectsTable as Table } from './ProjectsTable';
 import { fakeAuthAPI } from '../../auth/fakeAuthAPI';
 
 export default function Projects() {

@@ -1,25 +1,29 @@
-import { TableContainer, Table as Tbl, TableCaption, Thead, Tbody, Tr, Th } from "@chakra-ui/react";
+import { TableContainer, Table, Thead, Tbody, Tr, Th } from "@chakra-ui/react";
 
+import { useSort } from '../../utils/useSort';
 import { Issue } from './Issue';
 
 export function IssuesTable({ data }) {
+  const [issues, sort] = useSort(data);
+  console.log(data + ':' + issues.data);
+
   return (
     <TableContainer marginTop={10}>
-      <Tbl variant='simple'>
+      <Table variant='simple'>
         <Thead>
           <Tr>
-            <Th>Type</Th>
-            <Th>Priority</Th>
-            <Th>Status</Th>
-            <Th>Title</Th>
-            <Th isNumeric>Due</Th>
-            <Th isNumeric>Assignee</Th>
+            <Th onClick={() => sort('type')} cursor="pointer">Type</Th>
+            <Th onClick={() => sort('priority')} cursor="pointer">Priority</Th>
+            <Th onClick={() => sort('status')} cursor="pointer">Status</Th>
+            <Th onClick={() => sort('title')} cursor="pointer">Title</Th>
+            <Th onClick={() => sort('dueDate')} cursor="pointer" isNumeric>Due Date</Th>
+            <Th onClick={() => sort('assignee')} cursor="pointer" isNumeric>Assignee</Th>
           </Tr>
         </Thead>
         <Tbody>
-          {data.map(issue => <Issue key={issue.id} {...issue} />)}
+          {issues.data.map(issue => <Issue key={issue.id} {...issue} />)}
         </Tbody>
-      </Tbl>
+      </Table>
     </TableContainer>
   );
 }

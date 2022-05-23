@@ -1,5 +1,4 @@
 import { Tr, Td, Button } from '@chakra-ui/react';
-import { Link } from 'react-router-dom';
 
 export function Issue({
   id,

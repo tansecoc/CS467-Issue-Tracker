@@ -1,4 +1,4 @@
-import { Tr, Td, Button } from '@chakra-ui/react';
+import { Tr, Td } from '@chakra-ui/react';
 import { useNavigate } from 'react-router-dom';
 
 export function Project({

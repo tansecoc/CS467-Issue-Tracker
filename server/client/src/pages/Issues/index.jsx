@@ -1,11 +1,11 @@
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 
-import { IssuesTable } from './IssuesTable';
+import { IssuesTable as Table } from './IssuesTable';
 import { fakeAuthAPI } from '../../auth/fakeAuthAPI';
 
 export default function Projects() {
-  const params = {id: 0};
+  const params = useParams();
   const projectId = params.id;
 
   const [issues, setIssues] = useState([]);
@@ -19,6 +19,6 @@ export default function Projects() {
   }, []);
   
   return (
-    <IssuesTable data={issues}></IssuesTable>
+    <Table data={issues}></Table>
   )
 }
