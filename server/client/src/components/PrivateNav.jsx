@@ -15,7 +15,7 @@ import {
   useColorModeValue,
   Stack,
 } from '@chakra-ui/react';
-import { HamburgerIcon, CloseIcon, AddIcon } from '@chakra-ui/icons';
+import { HamburgerIcon, CloseIcon } from '@chakra-ui/icons';
 import { useNavigate, Link as RouterLink } from 'react-router-dom';
 import { useAuth } from '../auth/Auth';
 
@@ -63,15 +63,7 @@ export default function PrivateNav() {
               ))}
             </HStack>
           </HStack>
-          <Flex alignItems={'center'}>
-            <Button
-              variant={'solid'}
-              colorScheme={'teal'}
-              size={'sm'}
-              mr={4}
-              leftIcon={<AddIcon />}>
-              Action
-            </Button>
+          <Flex alignItems={'center'}>   
             <Menu>
               <MenuButton
                 as={Button}
