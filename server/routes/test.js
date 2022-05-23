@@ -16,12 +16,12 @@ router.get('/login', (req, res, next) => {
     res.send(form);
 });
 
-router.post('/login', passport.authenticate('local', { failureRedirect: '/login-failure', successRedirect: 'login-success' }), (err, req, res, next) => {
+router.post('/login', passport.authenticate('local', { failureRedirect: 'login-failure', successRedirect: 'login-success' }), (err, req, res, next) => {
     if (err) next(err);
 });
 
 router.get('/register', (req, res, next) => {
-    const form = '<h1>Register Page</h1><form method="post" action="/register">\
+    const form = '<h1>Register Page</h1><form method="post" action="register">\
                     Enter Email:<br><input type="text" name="username">\
                     <br>Enter Password:<br><input type="password" name="password">\
                     <br><br><input type="submit" value="Submit"></form>';
@@ -34,12 +34,11 @@ router.post('/register', (req, res, next) => {
             {user_first_name: 'K', user_last_name: 'P', org_id: '1', user_email: req.body.username, user_password_hash: hash}
         ).then()
     })
-    res.redirect('/login');
+    res.redirect('login');
 });
 
 router.get('/protected-route', (req, res, next) => {
     if (req.isAuthenticated()) {
-        console.log(req.session);
         res.send('<h1>You are authenticated</h1>');
     } else {
         res.send('<h1>You are not authenticated</h1>');
@@ -60,7 +59,7 @@ router.get('/login-success', (req, res, next) => {
 });
 
 router.get('/login-failure', (req, res, next) => {
-    res.send('You entered the wrong password.');
+    res.send('You entered the wrong login info.');
 });
 
 module.exports = router;

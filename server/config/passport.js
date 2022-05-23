@@ -9,7 +9,7 @@ passport.use(new LocalStrategy(function(username, password, cb) {
         pool.select().from('users').where('user_email', username)
         .then((results) => {
             let user = results[0];
-            if (typeof user == null || typeof user == undefined){
+            if (user === null || user === undefined){
                 return cb(null, false)
             }    
             // Validates hash password

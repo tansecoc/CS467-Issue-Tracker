@@ -3,11 +3,11 @@
 const process = require('process');
 const express = require('express');
 const session = require('express-session');
-// const pgSession = require('connect-pg-simple')(session);
 const knexSession = require('connect-session-knex')(session);
 const passport = require('passport');
 const pool = require('./config/database');
 require('./config/passport')
+
 const path = require('path');
 const fs= require("fs");
 if (fs.existsSync('./.env')) {
