@@ -1,14 +1,14 @@
 import { useEffect, useState } from 'react';
 
 import { ProjectsTable as Table } from './ProjectsTable';
-import { fakeAuthAPI } from '../../auth/fakeAuthAPI';
+import { fakeAPI } from '../../auth/fakeAPI';
 
 export default function Projects() {
   const [projects, setProjects] = useState([]);
 
   useEffect(() => {
     async function fetchData() {
-      const projects = await fakeAuthAPI.get_projects();
+      const projects = await fakeAPI.get_projects();
       setProjects(projects);
     }
     fetchData();

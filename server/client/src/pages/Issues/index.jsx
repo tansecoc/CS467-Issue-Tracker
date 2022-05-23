@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 
 import { IssuesTable as Table } from './IssuesTable';
-import { fakeAuthAPI } from '../../auth/fakeAuthAPI';
+import { fakeAPI } from '../../auth/fakeAPI';
 
 export default function Projects() {
   const params = useParams();
@@ -12,7 +12,7 @@ export default function Projects() {
 
   useEffect(() => {
     async function fetchData() {
-      const issuesData = await fakeAuthAPI.get_issues(projectId);
+      const issuesData = await fakeAPI.get_issues(projectId);
       setIssues(issuesData);
     }
     fetchData();
