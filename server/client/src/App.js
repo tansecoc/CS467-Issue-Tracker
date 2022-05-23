@@ -3,13 +3,12 @@ import {
   ChakraProvider,
   theme,
 } from '@chakra-ui/react';
-import Home from './pages/Home';
-import SignIn from './pages/SignIn';
-import SignUp from './pages/SignUp';
-import Layout from './components/Layout';
 import { Routes, Route } from 'react-router-dom';
+
 import { AuthProvider, RequireAuth, RequireUnauth } from './auth/Auth';
-import Org from './pages/Org';
+
+import Layout from './components/Layout';
+import * as Pages from './pages';
 
 function App() {
   return (
@@ -17,18 +16,18 @@ function App() {
       <AuthProvider>
        <Routes>
           <Route element={<RequireUnauth />}>
-            <Route index element={<Home />} />
-            <Route path="signup" element={<SignUp />} />
-            <Route path="signin" element={<SignIn />} />
+            <Route index element={<Pages.Home />} />
+            <Route path="signup" element={<Pages.SignUp />} />
+            <Route path="signin" element={<Pages.SignIn />} />
           </Route>
           <Route path="app" element={<RequireAuth><Layout /></RequireAuth>}>
-            <Route path="org" element={<Org />} />
-            <Route path="projects" />
-            <Route path="issues" />
+            <Route path="org" element={<Pages.Org />} />
+            <Route path="projects" element={<Pages.Projects />} />
+            <Route path="project/:id" element={<Pages.Issues />} />
           </Route>
         </Routes>
-        </AuthProvider>
-      </ChakraProvider>
+      </AuthProvider>
+    </ChakraProvider>
   );
 }
 

@@ -1,5 +1,5 @@
-import Hero from '../components/Hero';
-import PublicNav from '../components/PublicNav';
+import Hero from '../../components/Hero';
+import PublicNav from '../../components/PublicNav';
 
 let Home = () => {
   return (
