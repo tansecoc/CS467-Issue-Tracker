@@ -42,14 +42,14 @@ export const fakeAuthAPI = {
             id: 0,
             name: 'ExampleProject1',
             description: 'We are going to build something amazing!',
-            openIssues: 1,
+            openIssues: 2,
             closedIssues: 9
           },
           {
             id: 1,
             name: 'ExampleProject2',
             description: 'Solving big other issues',
-            openIssues: 2,
+            openIssues: 1,
             closedIssues: 14
           } 
         ];
@@ -76,7 +76,7 @@ export const fakeAuthAPI = {
             type: 'Task',
             priority: 'Med',
             status: 'Open',
-            dueDate: '06/28/22',
+            dueDate: '06/04/22',
             assignee: 'Kevin Gilpin'
           }  
         ];

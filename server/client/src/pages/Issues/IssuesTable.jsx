@@ -5,7 +5,6 @@ import { Issue } from './Issue';
 
 export function IssuesTable({ data }) {
   const [issues, sort] = useSort(data);
-  console.log(data + ':' + issues.data);
 
   return (
     <TableContainer marginTop={10}>
