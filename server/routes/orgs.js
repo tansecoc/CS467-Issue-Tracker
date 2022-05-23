@@ -1,18 +1,8 @@
-const server = require('../server.js');
-const { Router } = require('express');
-const router = Router();
+const router = require("express").Router();
+const passport = require("passport");
+let pool = require("../config/database");
 
 /* ------------- Begin Model Functions ------------- */
-
-function makeCode(length) {
-    var result           = '';
-    var characters       = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-    var charactersLength = characters.length;
-    for ( var i = 0; i < length; i++ ) {
-      result += characters.charAt(Math.floor(Math.random() * charactersLength));
-   }
-   return result;
-}
 
 async function createOrg(pool, org_creator_id, org_name) {
     await pool('organizations').insert({
@@ -30,13 +20,16 @@ async function createOrg(pool, org_creator_id, org_name) {
 /* ------------- Begin Controller Functions ------------- */
 
 router.post('/', async (req, res) => {
-    pool = await server.createPool();
     try {
-        let result = await createOrg(pool, req.body.org_creator_id, req.body.org_name);
-        res.send(result).end();
-    } catch (err) {
-        console.log(err);
-        res.status(500).send(false).end();
+        if (req.isAuthenticated()) {
+            let result = await createOrg(pool, req.cookies.user_id, req.body.org_name);
+            res.send(result).end();
+        } else {
+            res.send('You are not authenticated');
+        } 
+    } catch (error) {
+        console.log(error);
+        res.send('There was an error with this request.');
     }
 })
 

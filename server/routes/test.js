@@ -16,7 +16,7 @@ router.get('/login', (req, res, next) => {
     res.send(form);
 });
 
-router.post('/login', passport.authenticate('local', { failureRedirect: '/login-failure', successRedirect: 'login-success' }), (err, req, res, next) => {
+router.post('/login', passport.authenticate('local', { failureRedirect: '/test/login-failure', successRedirect: '/test/login-success' }), (err, req, res, next) => {
     if (err) next(err);
 });
 
