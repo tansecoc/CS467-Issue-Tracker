@@ -4,6 +4,12 @@ let pool = require("../config/database");
 
 /* ------------- Begin Model Functions ------------- */
 
+async function getOrgUsers(pool, org_id) {
+    return await pool.select().from("users").where({
+        org_id: org_id
+    });
+}
+
 async function createOrg(pool, org_creator_id, org_name) {
     await pool('organizations').insert({
         org_creator_id: org_creator_id,
@@ -18,6 +24,20 @@ async function createOrg(pool, org_creator_id, org_name) {
 
 
 /* ------------- Begin Controller Functions ------------- */
+
+router.get("/users", async (req, res) => {
+    try {
+        if (req.isAuthenticated()) {
+            result = await getOrgUsers(pool, req.cookies.org_id, );
+            res.send(result).end();
+        } else {
+            res.send('You are not authenticated');
+        }
+    } catch (error) {
+        console.log(error);
+        res.send('There was an error with this request.');
+    }
+});
 
 router.post('/', async (req, res) => {
     try {
