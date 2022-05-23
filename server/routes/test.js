@@ -9,18 +9,14 @@ router.get('/', (req, res, next) => {
 });
 
 router.get('/login', (req, res, next) => {
-    const form = '<h1>Login Page</h1><form method="POST" action="/test/login">\
+    const form = '<h1>Login Page</h1><form method="POST" action="login">\
     Enter Username:<br><input type="text" name="username">\
     <br>Enter Password:<br><input type="password" name="password">\
     <br><br><input type="submit" value="Submit"></form>';
     res.send(form);
 });
 
-<<<<<<< HEAD
-router.post('/login', passport.authenticate('local', { failureRedirect: '/test/login-failure', successRedirect: '/test/login-success' }), (err, req, res, next) => {
-=======
 router.post('/login', passport.authenticate('local', { failureRedirect: 'login-failure', successRedirect: 'login-success' }), (err, req, res, next) => {
->>>>>>> fc82708e57fda413b7164b2fc7d2b9d05053f250
     if (err) next(err);
 });
 
@@ -53,7 +49,7 @@ router.get('/logout', (req, res, next) => {
     res.clearCookie('user_id');
     res.clearCookie('org_id');
     req.logout();
-    res.redirect('/test/login');
+    res.redirect('login');
 });
 
 router.get('/login-success', (req, res, next) => {
