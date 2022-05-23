@@ -1,8 +1,8 @@
 import { useState } from 'react';
 import { Button, Flex, useColorModeValue } from '@chakra-ui/react';
 
-import CreateOrgModal from '../components/CreateOrgModal';
-import JoinOrgModal from '../components/JoinOrgModal';
+import CreateOrgModal from '../../components/CreateOrgModal';
+import JoinOrgModal from '../../components/JoinOrgModal';
 
 export default function Org(props) {
   let [showCreateModal, setShowCreateModal] = useState(false);
@@ -10,7 +10,7 @@ export default function Org(props) {
 
   return (
     <>
-      <h1 style={{textAlign: 'center', margin: '50px 0px'}}>You must have an organization:</h1>
+      <h1 style={{textAlign: 'center', margin: '50px 0px'}}>You must be a member of an organization:</h1>
       <Flex
         justifyContent="center"
         alignItems="center"
