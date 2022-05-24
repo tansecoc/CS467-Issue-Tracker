@@ -28,8 +28,13 @@ async function getProjects(pool, org_id) {
 router.post('/', async (req, res) => {
     try {
         if (req.isAuthenticated()) {
-            await createOrg(pool, req.body.project_name, req.body.project_description, req.cookies.user_id, req.cookies.org_id);
-            res.status(200).send(true).end();
+            try {
+                await createOrg(pool, req.body.project_name, req.body.project_description, req.cookies.user_id, req.cookies.org_id);
+                res.status(200).send(true).end();
+            } catch (error) {
+                console.log(error);
+                res.status(400).send(false).end();
+            }
         } else {
             res.status(401).send(false).end();
         } 
@@ -42,8 +47,13 @@ router.post('/', async (req, res) => {
 router.get('/', async (req, res) => {
     try {
         if (req.isAuthenticated()) {
-            result = await getProjects(pool, req.cookies.org_id);
-            res.status(200).send(result).end();
+            try {
+                result = await getProjects(pool, req.cookies.org_id);
+                res.status(200).send(result).end();
+            } catch (error) {
+                console.log(error);
+                res.status(400).send(false).end();
+            }
         } else {
             res.status(401).send(false).end();
         }
