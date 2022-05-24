@@ -20,6 +20,37 @@ async function getProjects(pool, org_id) {
     });
 }
 
+async function getIssues(pool, project_id) {
+    return await pool.select().from("issues").where({
+        project_id: project_id
+    });
+}
+
+async function updateProject(pool, project_id, project_name, project_description) {
+    if ((project_name === null || project_name === undefined) && (project_description === undefined)) {
+        return;
+    } else if (project_name === null || project_name === undefined) {
+        return await pool('projects').where('project_id', '=', project_id).update({
+            project_description: project_description
+        });
+    } else if (project_description === undefined) {
+        return await pool('projects').where('project_id', '=', project_id).update({
+            project_name: project_name
+        });
+    } else {
+        return await pool('projects').where('project_id', '=', project_id).update({
+            project_name: project_name,
+            project_description: project_description
+        });
+    }
+}
+
+async function deleteProject(pool, project_id) {
+    await pool('projects').where('project_id', '=', project_id).del();
+    await pool('issues').where('project_id', '=', project_id).del();
+}
+
+
 /* ------------- End Model Functions ------------- */
 
 
@@ -28,8 +59,13 @@ async function getProjects(pool, org_id) {
 router.post('/', async (req, res) => {
     try {
         if (req.isAuthenticated()) {
-            await createOrg(pool, req.body.project_name, req.body.project_description, req.cookies.user_id, req.cookies.org_id);
-            res.status(200).send(true).end();
+            try {
+                await createOrg(pool, req.body.project_name, req.body.project_description, req.cookies.user_id, req.cookies.org_id);
+                res.status(200).send(true).end();
+            } catch (error) {
+                console.log(error);
+                res.status(400).send(false).end();
+            }
         } else {
             res.status(401).send(false).end();
         } 
@@ -42,8 +78,13 @@ router.post('/', async (req, res) => {
 router.get('/', async (req, res) => {
     try {
         if (req.isAuthenticated()) {
-            result = await getProjects(pool, req.cookies.org_id);
-            res.status(200).send(result).end();
+            try {
+                result = await getProjects(pool, req.cookies.org_id);
+                res.status(200).send(result).end();
+            } catch (error) {
+                console.log(error);
+                res.status(400).send(false).end();
+            }
         } else {
             res.status(401).send(false).end();
         }
@@ -51,7 +92,64 @@ router.get('/', async (req, res) => {
         console.log(error);
         res.status(500).send(false).end();
     }
-});
+})
+
+router.get('/:project_id/issues', async (req, res) => {
+    try {
+        if (req.isAuthenticated()) {
+            try {
+                result = await getIssues(pool, req.params.project_id);
+                res.status(200).send(result).end();
+            } catch (error) {
+                console.log(error);
+                res.status(400).send(false).end();
+            }
+        } else {
+            res.status(401).send(false).end();
+        }
+    } catch (error) {
+        console.log(error);
+        res.status(500).send(false).end();
+    }
+})
+
+router.put('/:project_id', async (req, res) => {
+    try {
+        if (req.isAuthenticated()) {
+            try {
+                result = await updateProject(pool, req.params.project_id, req.body.project_name, req.body.project_description);
+                res.status(200).send(true).end();
+            } catch (error) {
+                console.log(error);
+                res.status(400).send(false).end();
+            }
+        } else {
+            res.status(401).send(false).end();
+        }
+    } catch (error) {
+        console.log(error);
+        res.status(500).send(false).end();
+    }
+})
+
+router.delete('/:project_id', async (req, res) => {
+    try {
+        if (req.isAuthenticated()) {
+            try {
+                result = await deleteProject(pool, req.params.project_id);
+                res.status(200).send(true).end();
+            } catch (error) {
+                console.log(error);
+                res.status(400).send(false).end();
+            }
+        } else {
+            res.status(401).send(false).end();
+        }
+    } catch (error) {
+        console.log(error);
+        res.status(500).send(false).end();
+    }
+})
 
 /* ------------- End Controller Functions ------------- */
 

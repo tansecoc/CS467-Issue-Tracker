@@ -5,12 +5,6 @@ const { createHash } = require('crypto');
 
 /* ------------- Begin Model Functions ------------- */
 
-async function getOrgUsers(pool, org_id) {
-    return await pool.select().from("users").where({
-        org_id: org_id
-    });
-}
-
 function hash(string) {
     return createHash('sha256').update(string).digest('hex');
 }
@@ -43,6 +37,12 @@ async function joinOrg(pool, org_id, user_id) {
     });
 }
 
+async function getOrgUsers(pool, org_id) {
+    return await pool.select().from("users").where({
+        org_id: org_id
+    });
+}
+
 async function leaveOrg(pool, user_id) {
     return await pool('users').where('user_id', '=', user_id).update({
         org_id: null
@@ -54,25 +54,16 @@ async function leaveOrg(pool, user_id) {
 
 /* ------------- Begin Controller Functions ------------- */
 
-router.get('/users', async (req, res) => {
-    try {
-        if (req.isAuthenticated()) {
-            result = await getOrgUsers(pool, req.cookies.org_id, );
-            res.status(200).send(result).end();
-        } else {
-            res.status(401).send(false).end();
-        }
-    } catch (error) {
-        console.log(error);
-        res.status(500).send(false).end();
-    }
-});
-
 router.post('/', async (req, res) => {
     try {
         if (req.isAuthenticated()) {
-            await createOrg(pool, req.cookies.user_id, req.body.org_name);
-            res.status(200).send(true).end();
+            try {
+                await createOrg(pool, req.cookies.user_id, req.body.org_name);
+                res.status(200).send(true).end();
+            } catch (error) {
+                console.log(error);
+                res.status(400).send(false).end();
+            }
         } else {
             res.status(401).send(false).end();
         } 
@@ -85,8 +76,13 @@ router.post('/', async (req, res) => {
 router.get('/invite', async (req, res) => {
     try {
         if (req.isAuthenticated()) {
-            let result = await getInviteCode(pool, req.cookies.org_id);
-            res.status(200).send(result[0]).end();
+            try {
+                let result = await getInviteCode(pool, req.cookies.org_id);
+                res.status(200).send(result[0]).end();
+            } catch (error) {
+                console.log(error);
+                res.status(400).send(false).end();
+            }
         } else {
             res.status(401).send(false).end();
         } 
@@ -99,11 +95,12 @@ router.get('/invite', async (req, res) => {
 router.post('/invite', async (req, res) => {
     try {
         if (req.isAuthenticated()) {
-            let org = await getOrgIdWithInvite(pool, req.body.org_invite_code);
-            let result = await joinOrg(pool, org[0].org_id, req.cookies.user_id);
-            if (result === 1) {
+            try {
+                let org = await getOrgIdWithInvite(pool, req.body.org_invite_code);
+                let result = await joinOrg(pool, org[0].org_id, req.cookies.user_id);
                 res.status(200).json({org_name: org[0].org_name}).end();
-            } else {
+            } catch (error) {
+                console.log(error);
                 res.status(400).send(false).end();
             }
         } else {
@@ -115,11 +112,35 @@ router.post('/invite', async (req, res) => {
     }
 })
 
+router.get('/users', async (req, res) => {
+    try {
+        if (req.isAuthenticated()) {
+            try {
+                result = await getOrgUsers(pool, req.cookies.org_id, );
+                res.status(200).send(result).end();
+            } catch (error) {
+                console.log(error);
+                res.status(400).send(false).end();
+            }
+        } else {
+            res.status(401).send(false).end();
+        }
+    } catch (error) {
+        console.log(error);
+        res.status(500).send(false).end();
+    }
+});
+
 router.delete('/users', async (req, res) => {
     try {
         if (req.isAuthenticated()) {
-            await leaveOrg(pool, req.cookies.user_id);
-            res.status(200).send(true).end();
+            try {
+                await leaveOrg(pool, req.cookies.user_id);
+                res.status(200).send(true).end();
+            } catch (error) {
+                console.log(error);
+                res.status(400).send(false).end();
+            }
         } else {
             res.status(401).send(false).end();
         } 
