@@ -1,7 +1,7 @@
 import React from 'react';
 import { useLocation, Navigate, Outlet } from 'react-router-dom';
 
-import { fakeAuthAPI } from './fakeAuthAPI';
+import { fakeAPI } from './fakeAPI';
 
 let AuthContext = React.createContext(null);
 
@@ -15,7 +15,7 @@ export function AuthProvider({ children }) {
 
   let signin = async (loginInfo, callback) => {
     try {
-      const authorized = await fakeAuthAPI.signin(loginInfo);
+      const authorized = await fakeAPI.signin(loginInfo);
       if (authorized) {
         storeUser(loginInfo);
         callback();
@@ -29,7 +29,7 @@ export function AuthProvider({ children }) {
 
   let signup = async (newUser, callback) => {
     try {
-      const authorized = await fakeAuthAPI.signup(newUser.email);
+      const authorized = await fakeAPI.signup(newUser.email);
       if (authorized) {
         storeUser(newUser.email);
         callback();
@@ -43,7 +43,7 @@ export function AuthProvider({ children }) {
 
   let signout = async (callback) => {
     try {
-      if (await fakeAuthAPI.signout()) {
+      if (await fakeAPI.signout()) {
         setUser(null);
         localStorage.removeItem('ITClient_User');
         callback();
