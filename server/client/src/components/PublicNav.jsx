@@ -26,6 +26,7 @@ export default function NavLoggedOut() {
           <Text
             textAlign={useBreakpointValue({ base: 'center', md: 'left' })}
             fontFamily={'heading'}
+            fontWeight={'bold'}
             color={useColorModeValue('green.800', 'white')}>
             IssueTracker
           </Text>

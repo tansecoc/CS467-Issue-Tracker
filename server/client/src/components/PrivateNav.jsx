@@ -18,6 +18,7 @@ import {
 import { HamburgerIcon, CloseIcon } from '@chakra-ui/icons';
 import { useNavigate, Link as RouterLink } from 'react-router-dom';
 import { FaUserCircle } from 'react-icons/fa';
+import { IoIosRocket } from 'react-icons/io';
 
 import { useAuth } from '../auth/Auth';
 
@@ -55,7 +56,7 @@ export default function PrivateNav() {
             onClick={isOpen ? onClose : onOpen}
           />
           <HStack spacing={8} alignItems={'center'}>
-            <Box color={'green'}>Issue Tracker</Box>
+            <Icon as={IoIosRocket} boxSize={8} /> 
             <HStack
               as={'nav'}
               spacing={4}
