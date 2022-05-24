@@ -64,7 +64,7 @@ router.get('/users', async (req, res) => {
         }
     } catch (error) {
         console.log(error);
-        res.send('There was an error with this request.');
+        res.send(false);
     }
 });
 
@@ -78,7 +78,7 @@ router.post('/', async (req, res) => {
         } 
     } catch (error) {
         console.log(error);
-        res.send('There was an error with this request.');
+        res.send(false);
     }
 })
 
@@ -92,7 +92,7 @@ router.get('/invite', async (req, res) => {
         } 
     } catch (error) {
         console.log(error);
-        res.send('There was an error with this request.');
+        res.send(false);
     }
 })
 
@@ -113,7 +113,7 @@ router.post('/invite', async (req, res) => {
         } 
     } catch (error) {
         console.log(error);
-        res.send('There was an error with this request.');
+        res.send(false);
     }
 })
 
@@ -127,7 +127,7 @@ router.delete('/users', async (req, res) => {
         } 
     } catch (error) {
         console.log(error);
-        res.send('There was an error with this request.');
+        res.send(false);
     }
 })
 
