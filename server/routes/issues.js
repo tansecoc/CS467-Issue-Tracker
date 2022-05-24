@@ -4,9 +4,22 @@ let pool = require('../config/database');
 
 /* ------------- Begin Model Functions ------------- */
 
-async function getUserID(pool, user_email) {
-    issueData = await pool.select().from('users').where('user_email', user_email);
+async function getUserInfo(pool, user_email) {
+    userData = await pool.select().from('users').where('user_email', user_email);
+    return userData[0];
+}
+
+async function getIssue(pool, issue_id){
+    issueData = await pool.select().from('issues').where('issue_id', issue_id);
     return issueData[0];
+}
+
+async function patchIssue(pool){
+    return await pool('issues').where().update({});
+}
+
+async function deleteIssue(pool, issue_id){
+    return await pool('issues').where('issue_id', issue_id).del();
 }
 
 /* ------------- End Model Functions ------------- */
@@ -47,7 +60,7 @@ router.post('/', async (req, res) => {
 
             // Checks if all required fields of form are filled out
             if (projectID && issueCreatorID && issueName && issueType && issuePriority && issueStatus && issueAssigneeEmail){
-                getUserID(pool, issueAssigneeEmail)
+                getUserInfo(pool, issueAssigneeEmail)
                 .then(result => {
                     if(result !== undefined || result !== null){
                         pool('issues')
@@ -68,6 +81,68 @@ router.post('/', async (req, res) => {
             res.status(401).send(false).end();
         }
     } catch (err) {
+        console.log(err);
+        res.status(500).send(false).end();
+    }
+})
+
+// Partially update issue
+router.put('/:issue_id', async (req, res) => {
+    try {
+        if (req.isAuthenticated()) {
+            getIssue(req.params.issue_id)
+            .then(issue => {
+                if(issue === undefined || issue === null){
+                    res.status(404).send(false).end();
+                } else{
+                    // Required
+                    let projectID = req.body.project_id;
+                    let issueCreatorID;
+                    if(req.cookies.user_id === undefined || req.cookies.user_id === null){
+                        res.status(400).send(false).end();
+                        return;
+                    } else{
+                        issueCreatorID = req.cookies.user_id;
+                    }
+                    let issueName = req.body.issue_name;
+
+                    // Optional
+                    let issueType = (req.body.issue_type !== undefined && req.body.issue_type !== null) ? req.body.issue_type : null;
+                    let issuePriority = (req.body.issue_priority !== undefined && req.body.issue_priority !== null) ? req.body.issue_priority : null;
+                    let issueStatus = (req.body.issue_status !== undefined && req.body.issue_status !== null) ? req.body.issue_status : null;
+                    let issueDueDate = (req.body.issue_due_date !== undefined && req.body.issue_due_date !== null) ? req.body.issue_due_date : null;
+                    let issueDescription = (req.body.issue_description !== undefined && req.body.issue_description !== null) ? req.body.issue_description : null;
+                    let issueAssigneeEmail = (req.body.issue_assignee_email !== undefined && req.body.issue_assignee_email !== null) ? req.body.issue_assignee_email : null;
+                }
+            })
+        } else{
+            res.status(401).send(false).end();
+        }
+    } catch (err){
+        console.log(err);
+        res.status(500).send(false).end();
+    }
+})
+
+// Deletes an issue
+router.delete('/:issue_id', async (req, res) => {
+    try {
+        if (req.isAuthenticated()) {
+            getIssue(req.params.issue_id)
+            .then(issue => {
+                if(issue === undefined || issue === null){
+                    res.status(404).send(false).end();
+                } else{
+                    deleteIssue(req.params.issue_id)
+                    .then(result => {
+                        res.status(200).send(true).end();
+                    })
+                }
+            })
+        } else{
+            res.status(401).send(false).end();
+        }
+    } catch (err){
         console.log(err);
         res.status(500).send(false).end();
     }
