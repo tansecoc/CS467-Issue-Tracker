@@ -23,13 +23,13 @@ router.post('/', async (req, res) => {
     try {
         if (req.isAuthenticated()) {
             await createOrg(pool, req.body.project_name, req.body.project_description, req.cookies.user_id, req.cookies.org_id);
-            res.send(true);
+            res.status(200).send(true).end();
         } else {
-            res.send('You are not authenticated');
+            res.status(401).send(false).end();
         } 
     } catch (error) {
         console.log(error);
-        res.send(false);
+        res.status(500).send(false).end();
     }
 })
 
