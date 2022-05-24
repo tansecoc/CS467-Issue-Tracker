@@ -71,7 +71,7 @@ router.get('/users', async (req, res) => {
 router.post('/', async (req, res) => {
     try {
         if (req.isAuthenticated()) {
-            let result = await createOrg(pool, req.cookies.user_id, req.body.org_name);
+            await createOrg(pool, req.cookies.user_id, req.body.org_name);
             res.send(true);
         } else {
             res.send('You are not authenticated');
@@ -120,7 +120,7 @@ router.post('/invite', async (req, res) => {
 router.delete('/users', async (req, res) => {
     try {
         if (req.isAuthenticated()) {
-            let result = await leaveOrg(pool, req.cookies.user_id);
+            await leaveOrg(pool, req.cookies.user_id);
             res.send(true);
         } else {
             res.send('You are not authenticated');
