@@ -1,8 +1,8 @@
 import { useState } from 'react';
 import { Button, Flex, useColorModeValue } from '@chakra-ui/react';
 
-import CreateOrgModal from '../../components/CreateOrgModal';
-import JoinOrgModal from '../../components/JoinOrgModal';
+import CreateOrgModal from './CreateOrgModal';
+import JoinOrgModal from './JoinOrgModal';
 
 export default function Org(props) {
   let [showCreateModal, setShowCreateModal] = useState(false);
