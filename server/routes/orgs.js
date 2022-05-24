@@ -27,6 +27,12 @@ async function createOrg(pool, org_creator_id, org_name, org_id) {
     return true;
 }
 
+async function getInviteCode(pool, org_id) {
+    return await pool.select("org_invite_code").from("organizations").where({
+        org_id: org_id
+    });
+}
+
 /* ------------- End Model Functions ------------- */
 
 
@@ -51,6 +57,20 @@ router.post('/', async (req, res) => {
         if (req.isAuthenticated()) {
             let result = await createOrg(pool, req.cookies.user_id, req.body.org_name);
             res.send(result).end();
+        } else {
+            res.send('You are not authenticated');
+        } 
+    } catch (error) {
+        console.log(error);
+        res.send('There was an error with this request.');
+    }
+})
+
+router.get('/invite', async (req, res) => {
+    try {
+        if (req.isAuthenticated()) {
+            let result = await getInviteCode(pool, req.cookies.org_id);
+            res.send(result[0]).end();
         } else {
             res.send('You are not authenticated');
         } 
