@@ -4,6 +4,7 @@ let pool = require("../config/database");
 
 /* ------------- Begin Model Functions ------------- */
 
+// Creates an organization
 async function createOrg(pool, project_name, project_description, user_id, org_id) {
     return await pool('projects').insert({
         org_id: org_id,
@@ -14,18 +15,21 @@ async function createOrg(pool, project_name, project_description, user_id, org_i
     });
 }
 
+// Gets all projects within an organization
 async function getProjects(pool, org_id) {
     return await pool.select().from("projects").where({
         org_id: org_id
     });
 }
 
+// Gets all issues within a project
 async function getIssues(pool, project_id) {
     return await pool.select().from("issues").where({
         project_id: project_id
     });
 }
 
+// Updates a project's information
 async function updateProject(pool, project_id, project_name, project_description) {
     if ((project_name === null || project_name === undefined) && (project_description === undefined)) {
         return;
@@ -45,6 +49,7 @@ async function updateProject(pool, project_id, project_name, project_description
     }
 }
 
+// Deletes a project
 async function deleteProject(pool, project_id) {
     await pool('projects').where('project_id', '=', project_id).del();
     await pool('issues').where('project_id', '=', project_id).del();
@@ -56,6 +61,7 @@ async function deleteProject(pool, project_id) {
 
 /* ------------- Begin Controller Functions ------------- */
 
+// Creates a new project in a user's organization
 router.post('/', async (req, res) => {
     try {
         if (req.isAuthenticated()) {
@@ -75,6 +81,7 @@ router.post('/', async (req, res) => {
     }
 })
 
+// Gets a list of all projects within a user's organization
 router.get('/', async (req, res) => {
     try {
         if (req.isAuthenticated()) {
@@ -94,6 +101,7 @@ router.get('/', async (req, res) => {
     }
 })
 
+// Gets a list of all issues within a project
 router.get('/:project_id/issues', async (req, res) => {
     try {
         if (req.isAuthenticated()) {
@@ -113,6 +121,7 @@ router.get('/:project_id/issues', async (req, res) => {
     }
 })
 
+// Updates a project's information
 router.put('/:project_id', async (req, res) => {
     try {
         if (req.isAuthenticated()) {
@@ -132,6 +141,7 @@ router.put('/:project_id', async (req, res) => {
     }
 })
 
+// Deletes a project
 router.delete('/:project_id', async (req, res) => {
     try {
         if (req.isAuthenticated()) {
