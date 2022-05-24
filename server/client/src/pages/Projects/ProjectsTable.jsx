@@ -1,4 +1,5 @@
 import { TableContainer, Table, Thead, Tbody, Tr, Th } from "@chakra-ui/react";
+import { ArrowUpDownIcon } from '@chakra-ui/icons'
 
 import { useSort } from '../../utils/useSort';
 import { Project } from './Project';
@@ -11,10 +12,10 @@ export function ProjectsTable({ data }) {
       <Table variant='simple'>
         <Thead>
           <Tr>
-            <Th fontSize={15} onClick={() => sortBy('name')} cursor="pointer">Project Name</Th>
-            <Th onClick={() => sortBy('description')} cursor="pointer">Description</Th>
-            <Th onClick={() => sortBy('openIssues')} cursor="pointer" isNumeric>Open Issues</Th>
-            <Th onClick={() => sortBy('closedIssues')} cursor="pointer" isNumeric>Closed Issues</Th>
+            <Th onClick={() => sortBy('name')} cursor="pointer">Project Name <ArrowUpDownIcon /></Th>
+            <Th onClick={() => sortBy('description')} cursor="pointer">Description <ArrowUpDownIcon /></Th>
+            <Th onClick={() => sortBy('openIssues')} cursor="pointer" isNumeric>Open Issues <ArrowUpDownIcon /></Th>
+            <Th onClick={() => sortBy('closedIssues')} cursor="pointer" isNumeric>Closed Issues <ArrowUpDownIcon /></Th>
             <Th w={40}></Th>
           </Tr>
         </Thead>

@@ -8,7 +8,7 @@ import { Routes, Route } from 'react-router-dom';
 import { AuthProvider, RequireAuth, RequireUnauth } from './auth/Auth';
 import { RequireOrg } from './components/RequireOrg';
 import Layout from './components/Layout';
-import * as Pages from './pages'
+import * as Pages from './pages';
 
 function App() {
   return (
