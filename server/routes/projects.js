@@ -26,6 +26,25 @@ async function getIssues(pool, project_id) {
     });
 }
 
+async function updateProject(pool, project_id, project_name, project_description) {
+    if ((project_name === null || project_name === undefined) && (project_description === undefined)) {
+        return;
+    } else if (project_name === null || project_name === undefined) {
+        return await pool('projects').where('project_id', '=', project_id).update({
+            project_description: project_description
+        });
+    } else if (project_description === undefined) {
+        return await pool('projects').where('project_id', '=', project_id).update({
+            project_name: project_name
+        });
+    } else {
+        return await pool('projects').where('project_id', '=', project_id).update({
+            project_name: project_name,
+            project_description: project_description
+        });
+    }
+}
+
 /* ------------- End Model Functions ------------- */
 
 
@@ -75,6 +94,25 @@ router.get('/:project_id/issues', async (req, res) => {
             try {
                 result = await getIssues(pool, req.params.project_id);
                 res.status(200).send(result).end();
+            } catch (error) {
+                console.log(error);
+                res.status(400).send(false).end();
+            }
+        } else {
+            res.status(401).send(false).end();
+        }
+    } catch (error) {
+        console.log(error);
+        res.status(500).send(false).end();
+    }
+})
+
+router.put('/:project_id', async (req, res) => {
+    try {
+        if (req.isAuthenticated()) {
+            try {
+                result = await updateProject(pool, req.params.project_id, req.body.project_name, req.body.project_description);
+                res.status(200).send(true).end();
             } catch (error) {
                 console.log(error);
                 res.status(400).send(false).end();
