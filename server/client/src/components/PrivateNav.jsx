@@ -1,9 +1,9 @@
 import {
   Box,
   Flex,
-  Avatar,
   HStack,
   Link,
+  Icon,
   IconButton,
   Button,
   Menu,
@@ -17,6 +17,8 @@ import {
 } from '@chakra-ui/react';
 import { HamburgerIcon, CloseIcon } from '@chakra-ui/icons';
 import { useNavigate, Link as RouterLink } from 'react-router-dom';
+import { FaUserCircle } from 'react-icons/fa';
+
 import { useAuth } from '../auth/Auth';
 
 const Links = [{title: 'Dashboard', path: '/app'}, {title: 'Projects', path: '/app/projects'}];
@@ -70,13 +72,9 @@ export default function PrivateNav() {
                 rounded={'full'}
                 variant={'link'}
                 cursor={'pointer'}
-                minW={0}>
-                <Avatar
-                  size={'sm'}
-                  src={
-                    'https://images.unsplash.com/photo-1493666438817-866a91353ca9?ixlib=rb-0.3.5&q=80&fm=jpg&crop=faces&fit=crop&h=200&w=200&s=b616b2c5b373a80ffc9636ba24f7a4a9'
-                  }
-                />
+                minW={0}
+                _focus={{ boxShadow: "none", }}>
+                <Icon as={FaUserCircle} boxSize={8} /> 
               </MenuButton>
               <MenuList>
                 <MenuItem onClick={() => navigate('/app/org')}>My Org</MenuItem>
