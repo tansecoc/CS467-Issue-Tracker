@@ -28,12 +28,12 @@ export default function CreateProjectForm({ closeModalHandler }) {
         boxShadow={'lg'}
         p={6}>
         <Heading lineHeight={1.1} fontSize={{ base: '2xl', md: '3xl' }}>
-          Create your organization
+          Create New Project
         </Heading>
         <Text
           fontSize={{ base: 'sm', sm: 'md' }}
           color={useColorModeValue('gray.800', 'gray.400')}>
-          What is the name of your organization?
+          Tell others a little bit about the project.
         </Text>
         <FormControl id="org">
           <Input
