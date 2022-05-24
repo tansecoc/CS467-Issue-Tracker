@@ -14,7 +14,7 @@ import {
 } from '@chakra-ui/react';
 import { Link as RouterLink, useNavigate, useLocation } from 'react-router-dom';
 
-import { useAuth } from '../auth/Auth';
+import { useAuth } from '../../auth/Auth';
 
 export default function SignIn() {
   let navigate = useNavigate();

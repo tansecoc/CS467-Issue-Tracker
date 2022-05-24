@@ -17,7 +17,7 @@ import { useState } from 'react';
 import { ViewIcon, ViewOffIcon } from '@chakra-ui/icons';
 import { Link as RouterLink, useNavigate, useLocation } from 'react-router-dom';
 
-import { useAuth } from '../auth/Auth';
+import { useAuth } from '../../auth/Auth';
 
 export default function SignUp() {
   let navigate = useNavigate();
