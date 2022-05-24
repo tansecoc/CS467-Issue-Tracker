@@ -21,12 +21,10 @@ export default function CreateIssueForm({ closeModalHandler }) {
     <Flex
       onClick={(e) => {e.stopPropagation()}}
       align={'center'}
-      justify={'center'}
-      w={'full'}>
+      justify={'center'}>
       <Stack
         spacing={4}
         w={'full'}
-        maxW={'md'}
         bg={useColorModeValue('white', 'gray.700')}
         rounded={'xl'}
         boxShadow={'lg'}
