@@ -5,21 +5,11 @@ let pool = require('../config/database');
 
 /* ------------- Begin Model Functions ------------- */
 
-async function obtainUserData(pool, email) {
-    userData = await pool
-    .select()
-    .from('users')
-    .where('user_email', email);
-
-    return userData[0];
-}
-
 async function obtainOrgData(pool, org_id) {
     orgData = await pool
     .select()
     .from('organizations')
     .where('org_id', org_id);
-
     return orgData[0];
 }
 
@@ -27,7 +17,6 @@ async function obtainOrgData(pool, org_id) {
 
 
 /* ------------- Begin Controller Functions ------------- */
-
 
 // Creates new user account 
 router.post('/', async (req, res) => {
@@ -48,7 +37,7 @@ router.post('/', async (req, res) => {
                 })
             })
         } else {
-            res.status(400).json({ msg: 'Bad request.' });
+            res.status(400).send(false).end();
         }
     } catch (err) {
         console.log(err);
@@ -56,35 +45,60 @@ router.post('/', async (req, res) => {
     }
 })
 
-// Validate user credentials, and send back user information and cookies
-router.post('/login', async (req, res) => {
+// Validates user credentials and redirects based on failure/success
+router.post('/login', passport.authenticate('local', { failureRedirect: 'login-failure', successRedirect: 'login-success' }), (err, req, res, next) => {
+    if (err) next(err);
+});
+
+
+// Redirected to from successful /login
+router.get('/login-success', (req, res, next) => {
+    let userInfo = {};
     try {
-        let email = req.body.email;
-        let password = req.body.password;
-        if (email && password) {
-            let userData = await obtainUserData(pool, email);
-            if (userData.user_email === email && userData.user_password_hash === password) {
-                let orgData = await obtainOrgData(pool, userData.org_id);
-                res.cookie('user_id', userData.user_id);
-                res.cookie('org_id', orgData.org_id);
-                res.status(200).json({
-                    first_name: userData.user_first_name,
-                    last_name: userData.user_last_name,
-                    email: userData.user_email,
-                    org_id: orgData.org_id,
-                    org_name: orgData.org_name
-                });
-            } else {
-                res.status(401).json({ msg: 'Invalid credentials.' });
-            }
-        } else {
-            res.status(400).json({ msg: 'Bad request.' });
+        userInfo.first_name = req.user.user_first_name;
+        userInfo.last_name = req.user.user_last_name;
+        userInfo.email = req.user.user_email;
+        res.cookie('user_id', req.user.user_id, {maxAge: 10 * 24 * 60 * 60 * 1000}) // 10 days
+        if(req.user.org_id === undefined || req.user.org_id === null){
+            userInfo.org_id = null;
+            userInfo.org_name = null
+            res.status(200).send(userInfo).end()
+        } else{
+            userInfo.org_id = req.user.org_id;
+            obtainOrgData(pool, req.user.org_id).then(orgData => {
+                userInfo.org_name = orgData.org_name;
+                res.cookie('org_id', req.user.org_id, {maxAge: 10 * 24 * 60 * 60 * 1000}) // 10 days
+                res.status(200).send(userInfo).end();
+            })
         }
     } catch (err) {
         console.log(err);
         res.status(500).send(false).end();
     }
 })
+
+// Redirected to from failure /login
+router.get('/login-failure', (req, res, next) => {
+    try {
+        res.status(401).send(false).end()
+    } catch (err) {
+        console.log(err);
+        res.status(500).send(false).end();
+    }
+})
+
+// User logout
+router.get('/logout', (req, res, next) => {
+    try{
+        res.clearCookie('user_id');
+        res.clearCookie('org_id');
+        req.logout();
+        res.status(200).send(true).end();
+    } catch (err){
+        console.log(err);
+        res.status(500).send(false).end();
+    }
+});
 
 /* ------------- End Controller Functions ------------- */
 
