@@ -1,6 +1,7 @@
 const router = require("express").Router();
 const passport = require("passport");
 let pool = require("../config/database");
+const { createHash } = require('crypto');
 
 /* ------------- Begin Model Functions ------------- */
 
@@ -10,12 +11,18 @@ async function getOrgUsers(pool, org_id) {
     });
 }
 
-async function createOrg(pool, org_creator_id, org_name) {
+function hash(string) {
+    return createHash('sha256').update(string).digest('hex');
+}
+
+async function createOrg(pool, org_creator_id, org_name, org_id) {
+    let org_invite_code = hash('secret' + org_id + 'code');
     await pool('organizations').insert({
         org_creator_id: org_creator_id,
         org_name: org_name,
-        org_create_date: (new Date()).toISOString().split('T')[0]
-    })
+        org_create_date: (new Date()).toISOString().split('T')[0],
+        org_invite_code: org_invite_code
+    });
 
     return true;
 }
