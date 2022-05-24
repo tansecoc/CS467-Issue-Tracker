@@ -20,6 +20,12 @@ async function getProjects(pool, org_id) {
     });
 }
 
+async function getIssues(pool, project_id) {
+    return await pool.select().from("issues").where({
+        project_id: project_id
+    });
+}
+
 /* ------------- End Model Functions ------------- */
 
 
@@ -61,7 +67,26 @@ router.get('/', async (req, res) => {
         console.log(error);
         res.status(500).send(false).end();
     }
-});
+})
+
+router.get('/:project_id/issues', async (req, res) => {
+    try {
+        if (req.isAuthenticated()) {
+            try {
+                result = await getIssues(pool, req.params.project_id);
+                res.status(200).send(result).end();
+            } catch (error) {
+                console.log(error);
+                res.status(400).send(false).end();
+            }
+        } else {
+            res.status(401).send(false).end();
+        }
+    } catch (error) {
+        console.log(error);
+        res.status(500).send(false).end();
+    }
+})
 
 /* ------------- End Controller Functions ------------- */
 
