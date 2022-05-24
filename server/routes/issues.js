@@ -18,7 +18,7 @@ async function getUserID(pool, user_email) {
 router.post('/', async (req, res) => {
     try {
         if (req.isAuthenticated()) {
-            
+
             // Required
             let projectID = req.body.project_id;
             let issueCreatorID;
@@ -49,7 +49,7 @@ router.post('/', async (req, res) => {
             if (projectID && issueCreatorID && issueName && issueType && issuePriority && issueStatus && issueAssigneeEmail){
                 getUserID(pool, issueAssigneeEmail)
                 .then(result => {
-                    if(result === undefined || result === null){
+                    if(result !== undefined || result !== null){
                         pool('issues')
                         .insert(
                             {project_id: projectID, issue_creator_id: issueCreatorID, issue_name: issueName, issue_assignee_id: result.user_id, issue_create_date: issueCreateDate, issue_type: issueType, issue_priority: issuePriority, issue_status: issueStatus, issue_due_date: issueDueDate, issue_description: issueDescription}
