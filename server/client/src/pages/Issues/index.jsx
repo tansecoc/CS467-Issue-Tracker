@@ -3,14 +3,16 @@ import { useParams } from 'react-router-dom';
 import { Heading, Button, Flex } from '@chakra-ui/react'
 import { AddIcon } from '@chakra-ui/icons';
 
-import { IssuesTable as Table } from './IssuesTable';
 import { fakeAPI } from '../../auth/fakeAPI';
+import { IssuesTable as Table } from './IssuesTable';
+import { CreateIssueModal } from './CreateIssueModal';
 
 export default function Projects() {
   const params = useParams();
   const projectId = params.id;
 
   const [issues, setIssues] = useState([]);
+  const [showCreateModal, setShowCreateModal] = useState(false);
 
   useEffect(() => {
     async function fetchData() {
@@ -19,6 +21,8 @@ export default function Projects() {
     }
     fetchData();
   }, [projectId]);
+
+  const closeCreateModalHandler = () => {setShowCreateModal(false)};
   
   return (
     <>
@@ -32,11 +36,13 @@ export default function Projects() {
           colorScheme={'teal'}
           size={'sm'}
           mr={4}
-          leftIcon={<AddIcon />}>
+          leftIcon={<AddIcon />}
+          onClick={() => {setShowCreateModal(!showCreateModal);}}>
           New Issue
         </Button>
       </Flex>
       <Table data={issues}></Table>
+      {showCreateModal ? <CreateIssueModal closeModalHandler={closeCreateModalHandler} /> : null}
     </>
   )
 }
