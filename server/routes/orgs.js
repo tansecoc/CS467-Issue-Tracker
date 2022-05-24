@@ -5,10 +5,12 @@ const { createHash } = require('crypto');
 
 /* ------------- Begin Model Functions ------------- */
 
+// Creates invite code hash
 function hash(string) {
     return createHash('sha256').update(string).digest('hex');
 }
 
+// Creates an organization
 async function createOrg(pool, org_creator_id, org_name, org_id) {
     let org_invite_code = hash('secret' + org_id + 'code');
     return await pool('organizations').insert({
@@ -19,30 +21,35 @@ async function createOrg(pool, org_creator_id, org_name, org_id) {
     });
 }
 
+// Gets an organization's invite code
 async function getInviteCode(pool, org_id) {
     return await pool.select('org_invite_code').from('organizations').where({
         org_id: org_id
     });
 }
 
+// Gets an organization's ID given an invite code
 async function getOrgIdWithInvite(pool, org_invite_code) {
     return await pool.select('org_id', 'org_name').from('organizations').where({
         org_invite_code: org_invite_code
     });
 }
 
+// Adss user to an organization
 async function joinOrg(pool, org_id, user_id) {
     return await pool('users').where('user_id', '=', user_id).update({
         org_id: org_id
     });
 }
 
+// Gets all users within an organization
 async function getOrgUsers(pool, org_id) {
     return await pool.select().from("users").where({
         org_id: org_id
     });
 }
 
+// Removes a user from an organization
 async function leaveOrg(pool, user_id) {
     return await pool('users').where('user_id', '=', user_id).update({
         org_id: null
@@ -54,6 +61,7 @@ async function leaveOrg(pool, user_id) {
 
 /* ------------- Begin Controller Functions ------------- */
 
+// Creates a new organization
 router.post('/', async (req, res) => {
     try {
         if (req.isAuthenticated()) {
@@ -73,6 +81,7 @@ router.post('/', async (req, res) => {
     }
 })
 
+// Gets an invite to join an organization
 router.get('/invite', async (req, res) => {
     try {
         if (req.isAuthenticated()) {
@@ -92,6 +101,7 @@ router.get('/invite', async (req, res) => {
     }
 })
 
+// Uses an invite to join an organization
 router.post('/invite', async (req, res) => {
     try {
         if (req.isAuthenticated()) {
@@ -112,6 +122,7 @@ router.post('/invite', async (req, res) => {
     }
 })
 
+// Get all users of an organization
 router.get('/users', async (req, res) => {
     try {
         if (req.isAuthenticated()) {
@@ -131,6 +142,7 @@ router.get('/users', async (req, res) => {
     }
 });
 
+// Removes a user from an organization
 router.delete('/users', async (req, res) => {
     try {
         if (req.isAuthenticated()) {
