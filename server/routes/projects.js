@@ -14,6 +14,12 @@ async function createOrg(pool, project_name, project_description, user_id, org_i
     });
 }
 
+async function getProjects(pool, org_id) {
+    return await pool.select().from("projects").where({
+        org_id: org_id
+    });
+}
+
 /* ------------- End Model Functions ------------- */
 
 
@@ -32,6 +38,20 @@ router.post('/', async (req, res) => {
         res.status(500).send(false).end();
     }
 })
+
+router.get('/', async (req, res) => {
+    try {
+        if (req.isAuthenticated()) {
+            result = await getProjects(pool, req.cookies.org_id);
+            res.status(200).send(result).end();
+        } else {
+            res.status(401).send(false).end();
+        }
+    } catch (error) {
+        console.log(error);
+        res.status(500).send(false).end();
+    }
+});
 
 /* ------------- End Controller Functions ------------- */
 
