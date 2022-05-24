@@ -45,6 +45,12 @@ async function updateProject(pool, project_id, project_name, project_description
     }
 }
 
+async function deleteProject(pool, project_id) {
+    await pool('projects').where('project_id', '=', project_id).del();
+    await pool('issues').where('project_id', '=', project_id).del();
+}
+
+
 /* ------------- End Model Functions ------------- */
 
 
@@ -112,6 +118,25 @@ router.put('/:project_id', async (req, res) => {
         if (req.isAuthenticated()) {
             try {
                 result = await updateProject(pool, req.params.project_id, req.body.project_name, req.body.project_description);
+                res.status(200).send(true).end();
+            } catch (error) {
+                console.log(error);
+                res.status(400).send(false).end();
+            }
+        } else {
+            res.status(401).send(false).end();
+        }
+    } catch (error) {
+        console.log(error);
+        res.status(500).send(false).end();
+    }
+})
+
+router.delete('/:project_id', async (req, res) => {
+    try {
+        if (req.isAuthenticated()) {
+            try {
+                result = await deleteProject(pool, req.params.project_id);
                 res.status(200).send(true).end();
             } catch (error) {
                 console.log(error);
