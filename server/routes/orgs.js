@@ -57,7 +57,7 @@ async function leaveOrg(pool, user_id) {
 router.get('/users', async (req, res) => {
     try {
         if (req.isAuthenticated()) {
-            result = await getOrgUsers(pool, req.cookies.org_id, );
+            result = await getOrgUsers(pool, req.cookies.org_id);
             res.status(200).send(result).end();
         } else {
             res.status(401).send(false).end();
