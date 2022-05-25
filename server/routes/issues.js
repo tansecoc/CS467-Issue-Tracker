@@ -14,8 +14,8 @@ async function getIssue(pool, issue_id){
     return issueData[0];
 }
 
-async function patchIssue(pool, updateObject){
-    return await pool('issues').where().update(updateObject);
+async function patchIssue(pool, issue_id, updateObject){
+    return await pool('issues').where('issue_id', issue_id).update(updateObject);
 }
 
 async function deleteIssue(pool, issue_id){
@@ -62,7 +62,7 @@ router.post('/', async (req, res) => {
             if (projectID && issueCreatorID && issueName && issueType && issuePriority && issueStatus && issueAssigneeEmail){
                 getUserInfo(pool, issueAssigneeEmail)
                 .then(result => {
-                    if(result !== undefined || result !== null){
+                    if(result !== undefined && result !== null){
                         pool('issues')
                         .insert(
                             {project_id: projectID, issue_creator_id: issueCreatorID, issue_name: issueName, issue_assignee_id: result.user_id, issue_create_date: issueCreateDate, issue_type: issueType, issue_priority: issuePriority, issue_status: issueStatus, issue_due_date: issueDueDate, issue_description: issueDescription}
@@ -90,7 +90,7 @@ router.post('/', async (req, res) => {
 router.put('/:issue_id', async (req, res) => {
     try {
         if (req.isAuthenticated()) {
-            getIssue(req.params.issue_id)
+            getIssue(pool, req.params.issue_id)
             .then(issue => {
                 // issue_id does not exist
                 if(issue === undefined || issue === null){
@@ -108,7 +108,7 @@ router.put('/:issue_id', async (req, res) => {
                     // Removes any falsy values from update object
                     for(let prop in issueUpdate){
                         if(!(issueUpdate[prop])){
-                            delete issueUpdate.prop
+                            delete issueUpdate[prop]
                         }
                     }
                     
@@ -118,9 +118,9 @@ router.put('/:issue_id', async (req, res) => {
                         getUserInfo(pool, req.body.issue_assignee_email)
                         .then(user => {
                             // User with issue_assignee_email found
-                            if(user !== undefined || user !== null){
+                            if(user !== undefined && user !== null){
                                 issueUpdate.issue_assignee_id = user.user_id
-                                patchIssue(pool, issueUpdate)
+                                patchIssue(pool, req.params.issue_id, issueUpdate)
                                 .then(result => {
                                     res.status(200).send(true).end()
                                 })
@@ -129,9 +129,12 @@ router.put('/:issue_id', async (req, res) => {
                                 res.status(404).send(false).end()
                             }
                         })
-                    // Not changing issue_assignee_id
+                    // Update object is empty
+                    } else if(Object.keys(issueUpdate).length < 1){
+                        res.status(400).send(false).end()
+                    // Not changing issue_assignee_id but update object is not empty
                     } else{
-                        patchIssue(pool, issueUpdate)
+                        patchIssue(pool, req.params.issue_id, issueUpdate)
                         .then(result => {
                             res.status(200).send(true).end()
                         })
@@ -151,12 +154,12 @@ router.put('/:issue_id', async (req, res) => {
 router.delete('/:issue_id', async (req, res) => {
     try {
         if (req.isAuthenticated()) {
-            getIssue(req.params.issue_id)
+            getIssue(pool, req.params.issue_id)
             .then(issue => {
                 if(issue === undefined || issue === null){
                     res.status(404).send(false).end();
                 } else{
-                    deleteIssue(req.params.issue_id)
+                    deleteIssue(pool, req.params.issue_id)
                     .then(result => {
                         res.status(200).send(true).end();
                     })
