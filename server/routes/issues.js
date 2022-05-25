@@ -4,22 +4,46 @@ let pool = require('../config/database');
 
 /* ------------- Begin Model Functions ------------- */
 
+// Gets user info from user_email
 async function getUserInfo(pool, user_email) {
-    userData = await pool.select().from('users').where('user_email', user_email);
+    let userData = await pool.select().from('users').where('user_email', user_email);
     return userData[0];
 }
 
+// Gets issue from issue_id
 async function getIssue(pool, issue_id){
-    issueData = await pool.select().from('issues').where('issue_id', issue_id);
+    let issueData = await pool.select().from('issues').where('issue_id', issue_id);
     return issueData[0];
 }
 
+// Updates issue
 async function patchIssue(pool, issue_id, updateObject){
     return await pool('issues').where('issue_id', issue_id).update(updateObject);
 }
 
+// Deletes issue
 async function deleteIssue(pool, issue_id){
     return await pool('issues').where('issue_id', issue_id).del();
+}
+
+// Validates whether given issue with issue_id belongs to org with org_id
+async function isInOrg(pool, issue_id, org_id){
+    if (org_id === undefined || org_id === null){
+        return false
+    }
+    let issuesJoinProjects = await pool('issues')
+    .select('issues.issue_id', 'projects.org_id')
+    .join('projects', 'issues.project_id', '=', 'projects.project_id')
+    .where('issue_id', issue_id);
+    if(issuesJoinProjects[0]){
+        if(issuesJoinProjects[0].org_id === org_id){
+            return true
+        } else{
+            return false
+        }
+    } else{
+        return false
+    }
 }
 
 /* ------------- End Model Functions ------------- */
@@ -32,24 +56,18 @@ router.post('/', async (req, res) => {
     try {
         if (req.isAuthenticated()) {
 
-            // Required
+            // Required properties
             let projectID = req.body.project_id;
-            let issueCreatorID;
-            if(req.cookies.user_id === undefined || req.cookies.user_id === null){
-                res.status(400).send(false).end();
-                return;
-            } else{
-                issueCreatorID = req.cookies.user_id;
-            }
+            let issueCreatorID = req.user.user_id;
             let issueName = req.body.issue_name;
-
-            // Optional
             let issueType = (req.body.issue_type !== undefined && req.body.issue_type !== null) ? req.body.issue_type : null;
             let issuePriority = (req.body.issue_priority !== undefined && req.body.issue_priority !== null) ? req.body.issue_priority : null;
             let issueStatus = (req.body.issue_status !== undefined && req.body.issue_status !== null) ? req.body.issue_status : null;
+            let issueAssigneeEmail = (req.body.issue_assignee_email !== undefined && req.body.issue_assignee_email !== null) ? req.body.issue_assignee_email : null;
+            
+            // Optional properties
             let issueDueDate = (req.body.issue_due_date !== undefined && req.body.issue_due_date !== null) ? req.body.issue_due_date : null;
             let issueDescription = (req.body.issue_description !== undefined && req.body.issue_description !== null) ? req.body.issue_description : null;
-            let issueAssigneeEmail = (req.body.issue_assignee_email !== undefined && req.body.issue_assignee_email !== null) ? req.body.issue_assignee_email : null;
 
             // Set creation date
             let today = new Date();
@@ -90,6 +108,12 @@ router.post('/', async (req, res) => {
 router.put('/:issue_id', async (req, res) => {
     try {
         if (req.isAuthenticated()) {
+            // User authorization
+            let isAuthorized = await isInOrg(pool, req.params.issue_id, req.user.org_id);
+            if(!(isAuthorized)){
+                res.status(403).send(false).end();
+                return;
+            }
             getIssue(pool, req.params.issue_id)
             .then(issue => {
                 // issue_id does not exist
@@ -154,6 +178,12 @@ router.put('/:issue_id', async (req, res) => {
 router.delete('/:issue_id', async (req, res) => {
     try {
         if (req.isAuthenticated()) {
+            // User authorization
+            let isAuthorized = await isInOrg(pool, req.params.issue_id, req.user.org_id);
+            if(!(isAuthorized)){
+                res.status(403).send(false).end();
+                return;
+            }
             getIssue(pool, req.params.issue_id)
             .then(issue => {
                 if(issue === undefined || issue === null){
