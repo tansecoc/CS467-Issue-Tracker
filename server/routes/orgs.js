@@ -66,7 +66,7 @@ router.post('/', async (req, res) => {
     try {
         if (req.isAuthenticated()) {
             try {
-                await createOrg(pool, req.cookies.user_id, req.body.org_name);
+                await createOrg(pool, req.user.user_id, req.body.org_name);
                 res.status(200).send(true).end();
             } catch (error) {
                 console.log(error);
@@ -86,7 +86,7 @@ router.get('/invite', async (req, res) => {
     try {
         if (req.isAuthenticated()) {
             try {
-                let result = await getInviteCode(pool, req.cookies.org_id);
+                let result = await getInviteCode(pool, req.user.org_id);
                 res.status(200).send(result[0]).end();
             } catch (error) {
                 console.log(error);
@@ -107,7 +107,8 @@ router.post('/invite', async (req, res) => {
         if (req.isAuthenticated()) {
             try {
                 let org = await getOrgIdWithInvite(pool, req.body.org_invite_code);
-                let result = await joinOrg(pool, org[0].org_id, req.cookies.user_id);
+                let result = await joinOrg(pool, org[0].org_id, req.user.user_id);
+                res.cookie('org_id', org[0].org_id, {maxAge: 10 * 24 * 60 * 60 * 1000}) // 10 days
                 res.status(200).json({org_name: org[0].org_name}).end();
             } catch (error) {
                 console.log(error);
@@ -127,7 +128,7 @@ router.get('/users', async (req, res) => {
     try {
         if (req.isAuthenticated()) {
             try {
-                result = await getOrgUsers(pool, req.cookies.org_id, );
+                result = await getOrgUsers(pool, req.user.org_id, );
                 res.status(200).send(result).end();
             } catch (error) {
                 console.log(error);
@@ -147,7 +148,8 @@ router.delete('/users', async (req, res) => {
     try {
         if (req.isAuthenticated()) {
             try {
-                await leaveOrg(pool, req.cookies.user_id);
+                await leaveOrg(pool, req.user.user_id);
+                res.clearCookie('org_id');
                 res.status(200).send(true).end();
             } catch (error) {
                 console.log(error);
