@@ -1,37 +1,42 @@
 import React from 'react';
 import { useLocation, Navigate, Outlet } from 'react-router-dom';
 
-import { fakeAPI } from './fakeAPI';
+import { postData } from '../utils/postData';
 
 let AuthContext = React.createContext(null);
 
 export function AuthProvider({ children }) {
-  let [user, setUser] = React.useState(localStorage.getItem('ITClient_User'));
+  let [user, setUser] = React.useState(JSON.parse(localStorage.getItem('user')));
 
   const storeUser = (user) => {
-    localStorage.setItem('ITClient_User', user);
+    const userData = JSON.stringify(user);
+    localStorage.setItem('user', userData);
     setUser(user);
-  };
+  }
 
-  let signin = async (loginInfo, callback) => {
+  const clearUser = () => {
+    localStorage.removeItem('user');
+    setUser(null);
+  }
+
+  const signin = async ({email, password}, callback) => {
     try {
-      const authorized = await fakeAPI.signin(loginInfo);
-      if (authorized) {
-        storeUser(loginInfo);
-        callback();
-        return true;
-      }
+      const user = await postData('/api/users/login', { username: email, password });
+      storeUser(user);
+      callback();
+      return true;
     }
     catch(err) {
       console.error(err);
     };
   };
 
-  let signup = async (newUser, callback) => {
+  const signup = async (newUser, callback) => {
     try {
-      const authorized = await fakeAPI.signup(newUser.email);
+      const authorized = await postData('/api/users', newUser);
       if (authorized) {
-        storeUser(newUser.email);
+        let user = {...newUser, orgId: null, orgName: null};
+        storeUser(user);
         callback();
         return true;
       }
@@ -41,20 +46,33 @@ export function AuthProvider({ children }) {
     }
   };
 
-  let signout = async (callback) => {
+  const signout = async (callback) => {
     try {
-      if (await fakeAPI.signout()) {
-        setUser(null);
-        localStorage.removeItem('ITClient_User');
+      if (await fetch('/api/users/logout')) {
+        clearUser();
         callback();
         return true;
       }
+      return false;
     } catch(err) {
       console.error(err);
     }
   };
 
-  let value = { user, signin, signup, signout };
+  const createOrg = async (orgName, callback) => {
+    try {
+      let res = await postData('/orgs', { org_name: orgName });
+      if(res) {
+        callback();
+      }
+      console.log(res);
+    }
+    catch(err) {
+      console.error(err);
+    }
+  }
+
+  let value = { user, signin, signup, signout, createOrg };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 }

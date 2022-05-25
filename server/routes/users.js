@@ -21,9 +21,9 @@ async function obtainOrgData(pool, org_id) {
 // Creates new user account 
 router.post('/', async (req, res) => {
     try {
-        let firstName = req.body.first_name
-        let lastName = req.body.last_name
-        let email = req.body.username;
+        let firstName = req.body.firstName
+        let lastName = req.body.lastName
+        let email = req.body.email;
         let password = req.body.password;
 
         // Checks if all fields of form are filled out
@@ -55,18 +55,18 @@ router.post('/login', passport.authenticate('local', { failureRedirect: 'login-f
 router.get('/login-success', (req, res, next) => {
     let userInfo = {};
     try {
-        userInfo.first_name = req.user.user_first_name;
-        userInfo.last_name = req.user.user_last_name;
+        userInfo.firstName = req.user.user_first_name;
+        userInfo.lastName = req.user.user_last_name;
         userInfo.email = req.user.user_email;
         res.cookie('user_id', req.user.user_id, {maxAge: 10 * 24 * 60 * 60 * 1000}) // 10 days
         if(req.user.org_id === undefined || req.user.org_id === null){
-            userInfo.org_id = null;
-            userInfo.org_name = null
+            userInfo.orgId = null;
+            userInfo.orgName = null
             res.status(200).send(userInfo).end()
         } else{
             userInfo.org_id = req.user.org_id;
             obtainOrgData(pool, req.user.org_id).then(orgData => {
-                userInfo.org_name = orgData.org_name;
+                userInfo.orgName = orgData.org_name;
                 res.cookie('org_id', req.user.org_id, {maxAge: 10 * 24 * 60 * 60 * 1000}) // 10 days
                 res.status(200).send(userInfo).end();
             })

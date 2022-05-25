@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import {
   Button,
   FormControl,
@@ -8,8 +9,23 @@ import {
   Text,
   useColorModeValue,
 } from '@chakra-ui/react';
+import { useNavigate, useLocation } from 'react-router-dom';
+
+import { useAuth } from '../../auth/Auth';
 
 export default function CreateOrgForm() {
+  let navigate = useNavigate();
+  let location = useLocation();
+  let auth = useAuth();
+
+  let from = location.state?.from?.pathname || "/";
+
+  const [orgName, setOrgName] = useState('');
+
+  const submitHandler = () => {
+    auth.createOrg(orgName, () => navigate(from, { replace: true }));
+  }
+
   return (
     <Flex
       onClick={(e) => {e.stopPropagation()}}
@@ -36,6 +52,7 @@ export default function CreateOrgForm() {
             placeholder="Your organization name"
             _placeholder={{ color: 'gray.500' }}
             type="text"
+            onChange={(e) => setOrgName(e.target.value)}
           />
         </FormControl>
         <Stack spacing={6}>
@@ -44,7 +61,8 @@ export default function CreateOrgForm() {
             color={'white'}
             _hover={{
               bg: 'teal.500',
-            }}>
+            }}
+            onClick={submitHandler}>
             Create Org
           </Button>
         </Stack>

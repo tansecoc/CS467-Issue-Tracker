@@ -38,7 +38,7 @@ export default function SignIn() {
       return;
     }
 
-    auth.signin(email, () => {
+    auth.signin({email, password}, () => {
       // Send them back to the page they tried to visit when they were
       // redirected to the login page. Use { replace: true } so we don't create
       // another entry in the history stack for the login page.  This means that
