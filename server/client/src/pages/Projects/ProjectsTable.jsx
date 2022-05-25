@@ -4,7 +4,7 @@ import { ArrowUpDownIcon } from '@chakra-ui/icons'
 import { useSort } from '../../utils/useSort';
 import { Project } from './Project';
 
-export function ProjectsTable({ data }) {
+export function ProjectsTable({ data, showEditModalHandler }) {
   const [projects, sortBy] = useSort(data);
 
   return (
@@ -20,7 +20,7 @@ export function ProjectsTable({ data }) {
           </Tr>
         </Thead>
         <Tbody>
-          {projects.data.map(project => <Project key={project.id} {...project} />)}
+          {projects.data.map(project => <Project key={project.id} {...project} showEditModalHandler={showEditModalHandler} />)}
         </Tbody>
       </Table>
     </TableContainer>

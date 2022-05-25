@@ -112,7 +112,7 @@ router.get('/', async (req, res) => {
 router.get('/:project_id/issues', async (req, res) => {
     try {
         if (req.isAuthenticated()) {
-            entity = await getOrgID(pool, req.params.project_id)
+            entity = await getOrgID(pool, req.params.project_id);
             org_id = entity[0].org_id;
             if (req.user.org_id === org_id) {
                 try {
@@ -138,7 +138,7 @@ router.get('/:project_id/issues', async (req, res) => {
 router.put('/:project_id', async (req, res) => {
     try {
         if (req.isAuthenticated()) {
-            entity = await getOrgID(pool, req.params.project_id)
+            entity = await getOrgID(pool, req.params.project_id);
             org_id = entity[0].org_id;
             if (req.user.org_id === org_id) {
                 try {
@@ -164,7 +164,7 @@ router.put('/:project_id', async (req, res) => {
 router.delete('/:project_id', async (req, res) => {
     try {
         if (req.isAuthenticated()) {
-            entity = await getOrgID(pool, req.params.project_id)
+            entity = await getOrgID(pool, req.params.project_id);
             org_id = entity[0].org_id;
             if (req.user.org_id === org_id) {
                 try {
