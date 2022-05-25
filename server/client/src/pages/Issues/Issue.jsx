@@ -1,4 +1,4 @@
-import { Tr, Td, Button } from '@chakra-ui/react';
+import { Tr, Td } from '@chakra-ui/react';
 
 export function Issue({
   title,
@@ -22,10 +22,6 @@ export function Issue({
       <Td>{title}</Td>
       <Td isNumeric>{dueDate}</Td>
       <Td isNumeric>{assignee}</Td>
-      {/* <Td isNumeric>
-        <Button mx={2}>Edit</Button>
-        <Button>Delete</Button>
-      </Td> */}
     </Tr>
   );
 }
