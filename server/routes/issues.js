@@ -1,5 +1,4 @@
 const router = require('express').Router();
-const e = require('express');
 const passport = require('passport');
 let pool = require('../config/database');
 
