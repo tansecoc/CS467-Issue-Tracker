@@ -24,9 +24,16 @@ async function getProjects(pool, org_id) {
 
 // Gets all issues within a project
 async function getIssues(pool, project_id) {
-    return await pool.select().from("issues").where({
+    return await pool.select().from('issues').where({
         project_id: project_id
     });
+}
+
+// Gets an organization's ID for a given project
+async function getOrgID(pool, project_id) {
+    return await pool.select('org_id').from('projects').where({
+        project_id: project_id
+    })
 }
 
 // Updates a project's information
@@ -105,12 +112,18 @@ router.get('/', async (req, res) => {
 router.get('/:project_id/issues', async (req, res) => {
     try {
         if (req.isAuthenticated()) {
-            try {
-                result = await getIssues(pool, req.params.project_id);
-                res.status(200).send(result).end();
-            } catch (error) {
-                console.log(error);
-                res.status(400).send(false).end();
+            entity = await getOrgID(pool, req.params.project_id)
+            org_id = String(entity[0].org_id);
+            if (req.cookies.org_id === org_id) {
+                try {
+                    result = await getIssues(pool, req.params.project_id);
+                    res.status(200).send(result).end();
+                } catch (error) {
+                    console.log(error);
+                    res.status(400).send(false).end();
+                }
+            } else {
+                res.status(403).send(false).end();
             }
         } else {
             res.status(401).send(false).end();
@@ -125,12 +138,18 @@ router.get('/:project_id/issues', async (req, res) => {
 router.put('/:project_id', async (req, res) => {
     try {
         if (req.isAuthenticated()) {
-            try {
-                result = await updateProject(pool, req.params.project_id, req.body.project_name, req.body.project_description);
-                res.status(200).send(true).end();
-            } catch (error) {
-                console.log(error);
-                res.status(400).send(false).end();
+            entity = await getOrgID(pool, req.params.project_id)
+            org_id = String(entity[0].org_id);
+            if (req.cookies.org_id === org_id) {
+                try {
+                    result = await updateProject(pool, req.params.project_id, req.body.project_name, req.body.project_description);
+                    res.status(200).send(true).end();
+                } catch (error) {
+                    console.log(error);
+                    res.status(400).send(false).end();
+                }
+            } else {
+                res.status(403).send(false).end();
             }
         } else {
             res.status(401).send(false).end();
@@ -145,12 +164,18 @@ router.put('/:project_id', async (req, res) => {
 router.delete('/:project_id', async (req, res) => {
     try {
         if (req.isAuthenticated()) {
-            try {
-                result = await deleteProject(pool, req.params.project_id);
-                res.status(200).send(true).end();
-            } catch (error) {
-                console.log(error);
-                res.status(400).send(false).end();
+            entity = await getOrgID(pool, req.params.project_id)
+            org_id = String(entity[0].org_id);
+            if (req.cookies.org_id === org_id) {
+                try {
+                    result = await deleteProject(pool, req.params.project_id);
+                    res.status(200).send(true).end();
+                } catch (error) {
+                    console.log(error);
+                    res.status(400).send(false).end();
+                }
+            } else {
+                res.status(403).send(false).end();
             }
         } else {
             res.status(401).send(false).end();
