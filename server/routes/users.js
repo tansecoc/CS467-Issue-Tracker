@@ -100,6 +100,15 @@ router.get('/logout', (req, res, next) => {
     }
 });
 
+// Test route
+router.get('/protected-route', (req, res, next) => {
+    if (req.isAuthenticated()) {
+        res.send('You are authenticated');
+    } else {
+        res.send('You are not authenticated');
+    }
+});
+
 /* ------------- End Controller Functions ------------- */
 
 
