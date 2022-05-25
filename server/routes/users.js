@@ -6,7 +6,7 @@ let pool = require('../config/database');
 /* ------------- Begin Model Functions ------------- */
 
 async function obtainOrgData(pool, org_id) {
-    orgData = await pool
+    let orgData = await pool
     .select()
     .from('organizations')
     .where('org_id', org_id);
@@ -97,15 +97,6 @@ router.get('/logout', (req, res, next) => {
     } catch (err){
         console.log(err);
         res.status(500).send(false).end();
-    }
-});
-
-// Test route
-router.get('/protected-route', (req, res, next) => {
-    if (req.isAuthenticated()) {
-        res.send('You are authenticated');
-    } else {
-        res.send('You are not authenticated');
     }
 });
 
