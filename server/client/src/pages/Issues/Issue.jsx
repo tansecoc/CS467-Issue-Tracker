@@ -1,21 +1,21 @@
 import { Tr, Td, Button } from '@chakra-ui/react';
 
 export function Issue({
-  id,
   title,
+  summary,
   type,
   priority,
   status,
   dueDate,
-  assignee
+  assignee,
+  showEditModalHandler
 }) {
-
-  const clickHandler = (e) => {
-    console.log('clicked!');
+  const editIssueHandler = (e) => {
+    showEditModalHandler({type, priority, title, summary, dueDate, assignee});
   }
 
   return (
-    <Tr cursor="pointer" _hover={{backgroundColor: 'gray.300'}} onClick={clickHandler}>
+    <Tr cursor="pointer" _hover={{backgroundColor: 'gray.300'}} onClick={editIssueHandler}>
       <Td>{type}</Td>
       <Td>{priority}</Td>
       <Td>{status}</Td>

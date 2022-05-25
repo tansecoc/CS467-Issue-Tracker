@@ -6,6 +6,7 @@ import { AddIcon } from '@chakra-ui/icons';
 import { fakeAPI } from '../../auth/fakeAPI';
 import { IssuesTable as Table } from './IssuesTable';
 import { CreateIssueModal } from './CreateIssueModal';
+import { EditIssueModal } from './EditIssueModal';
 
 export default function Projects() {
   const params = useParams();
@@ -13,6 +14,8 @@ export default function Projects() {
 
   const [issues, setIssues] = useState([]);
   const [showCreateModal, setShowCreateModal] = useState(false);
+  const [showEditModal, setShowEditModal] = useState(false);
+  const [issueInfo, setIssueInfo] = useState({type: null, priority: null, title: null, summary: null, dueDate: null, assignee: null});
 
   useEffect(() => {
     async function fetchData() {
@@ -23,6 +26,11 @@ export default function Projects() {
   }, [projectId]);
 
   const closeCreateModalHandler = () => {setShowCreateModal(false)};
+  const closeEditModalHandler = () => {setShowEditModal(false)};
+  const showEditModalHandler = ({type, priority, title, summary, dueDate, assignee}) => {
+    setIssueInfo({type, priority, title, summary, dueDate, assignee});
+    setShowEditModal(true);
+  };
   
   return (
     <>
@@ -41,8 +49,9 @@ export default function Projects() {
           New Issue
         </Button>
       </Flex>
-      <Table data={issues}></Table>
+      <Table data={issues} showEditModalHandler={showEditModalHandler}></Table>
       {showCreateModal ? <CreateIssueModal closeModalHandler={closeCreateModalHandler} /> : null}
+      {showEditModal ? <EditIssueModal issueInfo={issueInfo} closeModalHandler={closeEditModalHandler}  /> : null}
     </>
   )
 }
