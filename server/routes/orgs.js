@@ -108,6 +108,7 @@ router.post('/invite', async (req, res) => {
             try {
                 let org = await getOrgIdWithInvite(pool, req.body.org_invite_code);
                 let result = await joinOrg(pool, org[0].org_id, req.cookies.user_id);
+                res.cookie('org_id', org[0].org_id, {maxAge: 10 * 24 * 60 * 60 * 1000}) // 10 days
                 res.status(200).json({org_name: org[0].org_name}).end();
             } catch (error) {
                 console.log(error);
@@ -148,6 +149,7 @@ router.delete('/users', async (req, res) => {
         if (req.isAuthenticated()) {
             try {
                 await leaveOrg(pool, req.cookies.user_id);
+                res.clearCookie('org_id');
                 res.status(200).send(true).end();
             } catch (error) {
                 console.log(error);
