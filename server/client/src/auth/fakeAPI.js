@@ -64,55 +64,61 @@ export const fakeAPI = {
           {
             id: 0,
             title: 'Home page error',
+            summary: 'Bla lots of summary info here why we should build this.',
             type: 'Bug',
             priority: 'Low',
             status: 'Open',
-            dueDate: '06/12/22',
+            dueDate: '2022-06-12',
             assignee: 'Kevin Gilpin'
           },
           {
             id: 1,
             title: 'Create new signup page',
+            summary: 'Bla lots of summary info here why we should build this.',
             type: 'Task',
             priority: 'Med',
             status: 'Open',
-            dueDate: '06/04/22',
+            dueDate: '2022-06-04',
             assignee: 'Kevin Gilpin'
           },
           {
             id: 2,
             title: 'Sign In error',
+            summary: 'Bla lots of summary info here why we should build this.',
             type: 'Bug',
             priority: 'High',
             status: 'Open',
-            dueDate: '06/02/22',
+            dueDate: '2022-06-02',
             assignee: 'Kevin Peralta'
           },
           {
             id: 3,
             title: 'New feature 3',
+            summary: 'Bla lots of summary info here why we should build this.',
             type: 'Task',
             priority: 'Med',
             status: 'Open',
-            dueDate: '07/04/22',
+            dueDate: '2022-07-04',
             assignee: 'Casimero Tanseco'
           },
           {
             id: 4,
             title: 'Settings UI change',
+            summary: 'Bla lots of summary info here why we should build this.',
             type: 'Task',
             priority: 'Low',
             status: 'Open',
-            dueDate: '07/16/22',
+            dueDate: '2022-07-16',
             assignee: 'Kevin Gilpin'
           },
           {
             id: 5,
             title: 'New Feature 5',
+            summary: 'Bla lots of summary info here why we should build this.',
             type: 'Task',
             priority: 'Low',
             status: 'Open',
-            dueDate: '08/04/22',
+            dueDate: '2022-08-04',
             assignee: 'Kevin Gilpin'
           },  
         ];
