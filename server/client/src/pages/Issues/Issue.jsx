@@ -8,14 +8,14 @@ export function Issue({
   status,
   dueDate,
   assignee,
-  showEditModalHandler
+  showModalHandler
 }) {
-  const editIssueHandler = (e) => {
-    showEditModalHandler({type, priority, title, summary, dueDate, assignee});
+  const viewIssueHandler = (e) => {
+    showModalHandler({type, priority, title, summary, dueDate, assignee});
   }
 
   return (
-    <Tr cursor="pointer" _hover={{backgroundColor: 'gray.300'}} onClick={editIssueHandler}>
+    <Tr cursor="pointer" _hover={{backgroundColor: 'gray.300'}} onClick={viewIssueHandler}>
       <Td>{type}</Td>
       <Td>{priority}</Td>
       <Td>{status}</Td>

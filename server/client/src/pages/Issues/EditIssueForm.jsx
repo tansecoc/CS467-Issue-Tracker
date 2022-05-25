@@ -38,21 +38,9 @@ export default function CreateIssueForm({ issueInfo: {type, priority, title, sum
         rounded={'xl'}
         boxShadow={'lg'}
         p={6}>
-        <Flex justify={'space-between'}>
-          <Heading lineHeight={1.1} fontSize={{ base: '2xl', md: '3xl' }}>
-            Edit Issue
-          </Heading>
-          <Button
-            bg={'red.400'}
-            color={'white'}
-            _hover={{
-              bg: 'red.500',
-            }}
-            ml={2}
-            onClick={(() => {console.log(`name: ${title}, desc: ${summary}`)})}>
-            Delete
-          </Button>
-        </Flex>
+        <Heading lineHeight={1.1} fontSize={{ base: '2xl', md: '3xl' }}>
+          Edit Issue
+        </Heading>
         <Text
           fontSize={{ base: 'sm', sm: 'md' }}
           color={useColorModeValue('gray.800', 'gray.400')}>

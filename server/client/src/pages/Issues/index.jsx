@@ -5,6 +5,7 @@ import { AddIcon } from '@chakra-ui/icons';
 
 import { fakeAPI } from '../../auth/fakeAPI';
 import { IssuesTable as Table } from './IssuesTable';
+import { ViewIssueModal } from './ViewIssueModal';
 import { CreateIssueModal } from './CreateIssueModal';
 import { EditIssueModal } from './EditIssueModal';
 
@@ -13,6 +14,7 @@ export default function Projects() {
   const projectId = params.id;
 
   const [issues, setIssues] = useState([]);
+  const [showViewModal, setShowViewModal] = useState(false);
   const [showCreateModal, setShowCreateModal] = useState(false);
   const [showEditModal, setShowEditModal] = useState(false);
   const [issueInfo, setIssueInfo] = useState({type: null, priority: null, title: null, summary: null, dueDate: null, assignee: null});
@@ -25,10 +27,18 @@ export default function Projects() {
     fetchData();
   }, [projectId]);
 
+  const closeViewModalHandler = () => {setShowViewModal(false)};
   const closeCreateModalHandler = () => {setShowCreateModal(false)};
   const closeEditModalHandler = () => {setShowEditModal(false)};
-  const showEditModalHandler = ({type, priority, title, summary, dueDate, assignee}) => {
+  const showViewModalHandler = ({type, priority, title, summary, dueDate, assignee}) => {
     setIssueInfo({type, priority, title, summary, dueDate, assignee});
+    setShowCreateModal(false);
+    setShowEditModal(false);
+    setShowViewModal(true);
+  };
+  const showEditModalHandler = () => {
+    setShowCreateModal(false);
+    setShowViewModal(false);
     setShowEditModal(true);
   };
   
@@ -49,7 +59,8 @@ export default function Projects() {
           New Issue
         </Button>
       </Flex>
-      <Table data={issues} showEditModalHandler={showEditModalHandler}></Table>
+      <Table data={issues} showModalHandler={showViewModalHandler}></Table>
+      {showViewModal ? <ViewIssueModal issueInfo={issueInfo} closeModalHandler={closeViewModalHandler} showEditModalHandler={showEditModalHandler} /> : null}
       {showCreateModal ? <CreateIssueModal closeModalHandler={closeCreateModalHandler} /> : null}
       {showEditModal ? <EditIssueModal issueInfo={issueInfo} closeModalHandler={closeEditModalHandler}  /> : null}
     </>
