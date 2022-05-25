@@ -51,30 +51,30 @@ export default function ViewIssueDetails({ issueInfo: {type, priority, title, su
           </Button>
         </Flex>
         <FormControl id="issue">
-            <Flex grow={0} my={2}>
-              <FormLabel htmlFor='type' textAlign={'right'} w={75}>Type</FormLabel>
-              <Text>{type}</Text>
-            </Flex>
-            <Flex my={2}>
-              <FormLabel htmlFor='priority' textAlign={'right'} w={75}>Priority</FormLabel>
-              <Text>{priority}</Text>
-            </Flex>
-            <Flex grow={0} my={2}>
-              <FormLabel htmlFor='title' textAlign={'right'} w={75}>Title</FormLabel>
-              <Text><strong>{title}</strong></Text>
-            </Flex>
-            <Flex grow={0} my={2}>
-              <FormLabel htmlFor='summary' textAlign={'right'} w={75}>Summary</FormLabel>
-              <Text w={250} overflowWrap>{summary}</Text>
-            </Flex>
-            <Flex grow={0} my={2}>
-              <FormLabel htmlFor='due-date' textAlign={'right'} w={75}>Due Date</FormLabel>
-              <Text>{dueDate}</Text>
-            </Flex> 
-            <Flex grow={0} my={2}>
-              <FormLabel htmlFor='assignee' textAlign={'right'} w={75}>Assign To</FormLabel>
-              <Text>{assignee}</Text>
-            </Flex> 
+          <Flex grow={0} my={2}>
+            <FormLabel htmlFor='title' textAlign={'right'} w={75}>Title</FormLabel>
+            <Text><strong>{title}</strong></Text>
+          </Flex>
+          <Flex grow={0} my={2}>
+            <FormLabel htmlFor='type' textAlign={'right'} w={75}>Type</FormLabel>
+            <Text>{type}</Text>
+          </Flex>
+          <Flex my={2}>
+            <FormLabel htmlFor='priority' textAlign={'right'} w={75}>Priority</FormLabel>
+            <Text>{priority}</Text>
+          </Flex>
+          <Flex grow={0} my={2}>
+            <FormLabel htmlFor='summary' textAlign={'right'} w={75}>Summary</FormLabel>
+            <Text w={250} overflowWrap>{summary}</Text>
+          </Flex>
+          <Flex grow={0} my={2}>
+            <FormLabel htmlFor='due-date' textAlign={'right'} w={75}>Due Date</FormLabel>
+            <Text>{dueDate}</Text>
+          </Flex> 
+          <Flex grow={0} my={2}>
+            <FormLabel htmlFor='assignee' textAlign={'right'} w={75}>Assign To</FormLabel>
+            <Text>{assignee}</Text>
+          </Flex> 
         </FormControl>
         <Flex>
           <Button
