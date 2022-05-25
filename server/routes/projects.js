@@ -73,7 +73,7 @@ router.post('/', async (req, res) => {
     try {
         if (req.isAuthenticated()) {
             try {
-                await createOrg(pool, req.body.project_name, req.body.project_description, req.cookies.user_id, req.cookies.org_id);
+                await createOrg(pool, req.body.project_name, req.body.project_description, req.user.user_id, req.user.org_id);
                 res.status(200).send(true).end();
             } catch (error) {
                 console.log(error);
@@ -93,7 +93,7 @@ router.get('/', async (req, res) => {
     try {
         if (req.isAuthenticated()) {
             try {
-                result = await getProjects(pool, req.cookies.org_id);
+                result = await getProjects(pool, req.user.org_id);
                 res.status(200).send(result).end();
             } catch (error) {
                 console.log(error);
@@ -113,8 +113,8 @@ router.get('/:project_id/issues', async (req, res) => {
     try {
         if (req.isAuthenticated()) {
             entity = await getOrgID(pool, req.params.project_id)
-            org_id = String(entity[0].org_id);
-            if (req.cookies.org_id === org_id) {
+            org_id = entity[0].org_id;
+            if (req.user.org_id === org_id) {
                 try {
                     result = await getIssues(pool, req.params.project_id);
                     res.status(200).send(result).end();
@@ -139,8 +139,8 @@ router.put('/:project_id', async (req, res) => {
     try {
         if (req.isAuthenticated()) {
             entity = await getOrgID(pool, req.params.project_id)
-            org_id = String(entity[0].org_id);
-            if (req.cookies.org_id === org_id) {
+            org_id = entity[0].org_id;
+            if (req.user.org_id === org_id) {
                 try {
                     result = await updateProject(pool, req.params.project_id, req.body.project_name, req.body.project_description);
                     res.status(200).send(true).end();
@@ -165,8 +165,8 @@ router.delete('/:project_id', async (req, res) => {
     try {
         if (req.isAuthenticated()) {
             entity = await getOrgID(pool, req.params.project_id)
-            org_id = String(entity[0].org_id);
-            if (req.cookies.org_id === org_id) {
+            org_id = entity[0].org_id;
+            if (req.user.org_id === org_id) {
                 try {
                     result = await deleteProject(pool, req.params.project_id);
                     res.status(200).send(true).end();
