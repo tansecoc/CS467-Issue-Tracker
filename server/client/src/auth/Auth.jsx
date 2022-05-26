@@ -69,9 +69,20 @@ export function AuthProvider({ children }) {
     catch(err) {
       console.error(err);
     }
+  };
+
+  const joinOrg = async (inviteCode, callback) => {
+    try {
+      let res = await postData('/api/orgs/invite', { org_invite_code: inviteCode });
+      console.log(res);
+      callback();
+    }
+    catch(err) {
+      console.error(err);
+    }
   }
 
-  let value = { user, signin, signup, signout, createOrg };
+  let value = { user, signin, signup, signout, createOrg, joinOrg };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 }

@@ -52,6 +52,7 @@ export default function CreateOrgForm() {
             placeholder="Your organization name"
             _placeholder={{ color: 'gray.500' }}
             type="text"
+            value={orgName}
             onChange={(e) => setOrgName(e.target.value)}
           />
         </FormControl>
