@@ -22,7 +22,11 @@ import { IoIosRocket } from 'react-icons/io';
 
 import { useAuth } from '../auth/Auth';
 
-const Links = [{title: 'Dashboard', path: '/app'}, {title: 'Projects', path: '/app/projects'}];
+const Links = [
+  {title: 'Dashboard', path: '/app'}, 
+  {title: 'Projects', path: '/app/projects'},
+  {title: 'Organization', path: '/app/org'}
+];
 
 const NavLink = ({ children, path }) => (
   <Link

@@ -14,6 +14,13 @@ export function AuthProvider({ children }) {
     setUser(user);
   }
 
+  const updateUser = (newInfo) => {
+    const newUser = {...user, ...newInfo};
+    const newUserData = JSON.stringify(newUser);
+    localStorage.setItem('user', newUserData);
+    setUser(newUser);
+  }
+
   const clearUser = () => {
     localStorage.removeItem('user');
     setUser(null);
@@ -82,7 +89,23 @@ export function AuthProvider({ children }) {
     }
   }
 
-  let value = { user, signin, signup, signout, createOrg, joinOrg };
+  const leaveOrg = async (callback) => {
+    try {
+      fetch('/api/orgs/users', {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      });
+      updateUser({orgId: null, orgName: null});
+      callback();
+    }
+    catch(err) {
+      console.error(err);
+    }
+  }
+
+  let value = { user, signin, signup, signout, createOrg, joinOrg, leaveOrg };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 }
@@ -131,7 +154,7 @@ export function RequireOrg() {
     // trying to go to when they were redirected. This allows us to send them
     // along to that page after they login, which is a nicer user experience
     // than dropping them off on the home page.
-    return <Navigate to="/app/org" state={{ from: location }} replace />;
+    return <Navigate to="/app/add-org" state={{ from: location }} replace />;
   }
 
   return <Outlet />;
