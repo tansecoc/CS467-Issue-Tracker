@@ -5,8 +5,7 @@ import {
 } from '@chakra-ui/react';
 import { Routes, Route } from 'react-router-dom';
 
-import { AuthProvider, RequireAuth, RequireUnauth } from './auth/Auth';
-import { RequireOrg } from './components/RequireOrg';
+import { AuthProvider, RequireAuth, RequireUnauth, RequireOrg } from './auth/Auth';
 import Layout from './components/Layout';
 import * as Pages from './pages';
 
@@ -21,7 +20,7 @@ function App() {
             <Route path="signin" element={<Pages.SignIn />} />
           </Route>
           <Route path="app" element={<RequireAuth><Layout /></RequireAuth>}>
-            <Route path="org" element={<Pages.Org />} />
+            <Route path="add-org" element={<Pages.AddOrg />} />
             <Route element={<RequireOrg />}>
               <Route path="" element={<h1>Dashboard</h1>} />
               <Route path="projects" element={<Pages.Projects />} />
