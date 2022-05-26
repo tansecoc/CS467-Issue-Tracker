@@ -11,12 +11,15 @@ function hash(string) {
 }
 
 // Creates an organization
-async function createOrg(pool, org_creator_id, org_name, org_id) {
-    let org_invite_code = hash('secret' + org_id + 'code');
-    return await pool('organizations').insert({
+async function createOrg(pool, org_creator_id, org_name) {
+    let org_invite_code = hash('secret' + Date.now() + 'code');
+    await pool('organizations').insert({
         org_creator_id: org_creator_id,
         org_name: org_name,
         org_create_date: (new Date()).toISOString().split('T')[0],
+        org_invite_code: org_invite_code
+    });
+    return await pool.select('org_id').from('organizations').where({
         org_invite_code: org_invite_code
     });
 }
@@ -66,7 +69,10 @@ router.post('/', async (req, res) => {
     try {
         if (req.isAuthenticated()) {
             try {
-                await createOrg(pool, req.user.user_id, req.body.org_name);
+                let entity = await createOrg(pool, req.user.user_id, req.body.org_name);
+                let org_id = entity[0].org_id;
+                await joinOrg(pool, org_id, req.user.user_id);
+                res.cookie('org_id', org_id, {maxAge: 10 * 24 * 60 * 60 * 1000}); // 10 days
                 res.status(200).send(true).end();
             } catch (error) {
                 console.log(error);
