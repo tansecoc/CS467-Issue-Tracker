@@ -19,12 +19,13 @@ export default function Org(props) {
           {...props}
           px={8}
           mx={2}
-          bg={useColorModeValue('#151f21', 'gray.900')}
+          bg={'teal.400'}  
           color={'white'}
           rounded={'md'}
           _hover={{
             transform: 'translateY(-2px)',
             boxShadow: 'lg',
+            bg: 'teal.500',
           }}
           onClick={() => {setShowCreateModal(!showCreateModal); console.log(showCreateModal);}}>
           Create Org
@@ -33,12 +34,13 @@ export default function Org(props) {
           {...props}
           px={8}
           mx={2}
-          bg={useColorModeValue('#151f21', 'gray.900')}
+          bg={'teal.400'}  
           color={'white'}
           rounded={'md'}
           _hover={{
             transform: 'translateY(-2px)',
             boxShadow: 'lg',
+            bg: 'teal.500',
           }}
           onClick={() => {setShowJoinModal(!showJoinModal); console.log(showJoinModal);}}>
           Join Org

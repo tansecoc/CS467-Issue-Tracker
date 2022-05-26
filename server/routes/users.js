@@ -64,7 +64,7 @@ router.get('/login-success', (req, res, next) => {
             userInfo.orgName = null
             res.status(200).send(userInfo).end()
         } else{
-            userInfo.org_id = req.user.org_id;
+            userInfo.orgId = req.user.org_id;
             obtainOrgData(pool, req.user.org_id).then(orgData => {
                 userInfo.orgName = orgData.org_name;
                 res.cookie('org_id', req.user.org_id, {maxAge: 10 * 24 * 60 * 60 * 1000}) // 10 days

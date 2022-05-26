@@ -23,6 +23,7 @@ function App() {
           <Route path="app" element={<RequireAuth><Layout /></RequireAuth>}>
             <Route path="org" element={<Pages.Org />} />
             <Route element={<RequireOrg />}>
+              <Route path="" element={<h1>Dashboard</h1>} />
               <Route path="projects" element={<Pages.Projects />} />
               <Route path="project/:id" element={<Pages.Issues />} />
             </Route>
