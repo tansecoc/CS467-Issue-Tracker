@@ -65,7 +65,6 @@ export function AuthProvider({ children }) {
       if(res) {
         callback();
       }
-      console.log(res);
     }
     catch(err) {
       console.error(err);
