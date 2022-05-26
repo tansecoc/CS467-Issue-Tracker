@@ -82,8 +82,6 @@ export default function PrivateNav() {
                 <Icon as={FaUserCircle} boxSize={8} /> 
               </MenuButton>
               <MenuList>
-                <MenuItem onClick={() => navigate('/app/org')}>My Org</MenuItem>
-                <MenuDivider />
                 <MenuItem onClick={() => {
           auth.signout(() => navigate("/"));
         }}>Sign Out</MenuItem>

@@ -115,7 +115,7 @@ router.post('/invite', async (req, res) => {
                 let org = await getOrgIdWithInvite(pool, req.body.org_invite_code);
                 let result = await joinOrg(pool, org[0].org_id, req.user.user_id);
                 res.cookie('org_id', org[0].org_id, {maxAge: 10 * 24 * 60 * 60 * 1000}) // 10 days
-                res.status(200).json({org_name: org[0].org_name}).end();
+                res.status(200).json({org_id: org[0].org_id, org_name: org[0].org_name}).end();
             } catch (error) {
                 console.log(error);
                 res.status(400).send(false).end();

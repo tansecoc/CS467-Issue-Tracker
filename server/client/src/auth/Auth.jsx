@@ -80,8 +80,8 @@ export function AuthProvider({ children }) {
 
   const joinOrg = async (inviteCode, callback) => {
     try {
-      let res = await postData('/api/orgs/invite', { org_invite_code: inviteCode });
-      console.log(res);
+      let orgInfo = await postData('/api/orgs/invite', { org_invite_code: inviteCode });
+      updateUser({...user, orgId: orgInfo.org_id, orgName: orgInfo.org_name});
       callback();
     }
     catch(err) {
