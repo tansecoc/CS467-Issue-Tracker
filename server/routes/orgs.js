@@ -73,7 +73,7 @@ router.post('/', async (req, res) => {
                 let org_id = entity[0].org_id;
                 await joinOrg(pool, org_id, req.user.user_id);
                 res.cookie('org_id', org_id, {maxAge: 10 * 24 * 60 * 60 * 1000}); // 10 days
-                res.status(200).send(true).end();
+                res.status(200).json({org_id: org_id, org_name: req.body.org_name}).end();
             } catch (error) {
                 console.log(error);
                 res.status(400).send(false).end();
