@@ -14,7 +14,23 @@ export function useSort(data) {
         newIssues.reverse();
         return { data: newIssues, sortedBy: key, isReversed: !prev.isReversed};
       } else {
-        if (typeof newIssues[0][key] === 'string') {
+        if (key === 'priority') {
+          let priorityToNum = (priority) => {
+            switch(priority) {
+              case 'High':
+                return 3;
+              case 'Med':
+                return 2;
+              case 'Low':
+                return 1;
+              default:
+                return 0;
+            }
+          };
+
+          newIssues.sort((a, b) => priorityToNum(a[key]) - priorityToNum(b[key]));
+        }
+        else if (typeof newIssues[0][key] === 'string') {
           newIssues.sort((a, b) => a[key].toLowerCase() > b[key].toLowerCase() ? 1 : -1);
         } else {
           newIssues.sort((a, b) => a[key] - b[key]);
