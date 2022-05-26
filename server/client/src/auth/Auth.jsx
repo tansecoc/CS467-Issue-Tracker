@@ -61,7 +61,7 @@ export function AuthProvider({ children }) {
 
   const createOrg = async (orgName, callback) => {
     try {
-      let res = await postData('/orgs', { org_name: orgName });
+      let res = await postData('/api/orgs', { org_name: orgName });
       if(res) {
         callback();
       }

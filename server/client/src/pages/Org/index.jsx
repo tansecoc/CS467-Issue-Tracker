@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Button, Flex, useColorModeValue } from '@chakra-ui/react';
+import { Button, Flex } from '@chakra-ui/react';
 
 import CreateOrgModal from './CreateOrgModal';
 import JoinOrgModal from './JoinOrgModal';
