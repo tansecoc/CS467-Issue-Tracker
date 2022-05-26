@@ -1,6 +1,5 @@
 import { Tr, Td, Icon } from '@chakra-ui/react';
-import { WarningIcon, CheckCircleIcon, ArrowDownIcon, ArrowUpIcon, MinusIcon } from '@chakra-ui/icons';
-import { HiChevronUp, HiChevronDown } from 'react-icons/hi';
+import { WarningIcon, CheckCircleIcon, ArrowDownIcon, ArrowUpIcon } from '@chakra-ui/icons'
 import { FiChevronsUp } from 'react-icons/fi';
 
 export function Issue({
