@@ -36,6 +36,13 @@ async function getOrgID(pool, project_id) {
     })
 }
 
+// Gets a projects's name and description for a given id
+async function getProject(pool, project_id) {
+    return await pool.first('project_name', 'project_description').from('projects').where({
+        project_id: project_id
+    })
+}
+
 // Updates a project's information
 async function updateProject(pool, project_id, project_name, project_description) {
     if ((project_name === null || project_name === undefined) && (project_description === undefined)) {
@@ -117,6 +124,32 @@ router.get('/:project_id/issues', async (req, res) => {
             if (req.user.org_id === org_id) {
                 try {
                     result = await getIssues(pool, req.params.project_id);
+                    res.status(200).send(result).end();
+                } catch (error) {
+                    console.log(error);
+                    res.status(400).send(false).end();
+                }
+            } else {
+                res.status(403).send(false).end();
+            }
+        } else {
+            res.status(401).send(false).end();
+        }
+    } catch (error) {
+        console.log(error);
+        res.status(500).send(false).end();
+    }
+})
+
+// Retrieves a project's information
+router.get('/:project_id', async (req, res) => {
+    try {
+        if (req.isAuthenticated()) {
+            entity = await getOrgID(pool, req.params.project_id);
+            org_id = entity[0].org_id;
+            if (req.user.org_id === org_id) {
+                try {
+                    result = await getProject(pool, req.params.project_id);
                     res.status(200).send(result).end();
                 } catch (error) {
                     console.log(error);

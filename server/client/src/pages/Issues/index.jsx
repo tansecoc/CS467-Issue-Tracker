@@ -1,31 +1,54 @@
 import { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useLocation } from 'react-router-dom';
 import { Heading, Button, Flex } from '@chakra-ui/react'
 import { AddIcon } from '@chakra-ui/icons';
 
-import { fakeAPI } from '../../auth/fakeAPI';
 import { IssuesTable as Table } from './IssuesTable';
 import { ViewIssueModal } from './ViewIssueModal';
 import { CreateIssueModal } from './CreateIssueModal';
 import { EditIssueModal } from './EditIssueModal';
 
 export default function Projects() {
-  const params = useParams();
-  const projectId = params.id;
-
   const [issues, setIssues] = useState([]);
   const [showViewModal, setShowViewModal] = useState(false);
   const [showCreateModal, setShowCreateModal] = useState(false);
   const [showEditModal, setShowEditModal] = useState(false);
   const [issueInfo, setIssueInfo] = useState({type: null, priority: null, title: null, summary: null, dueDate: null, assignee: null});
+  
+
+  const params = useParams();
+  const project_id = params.id;
+  const { state } = useLocation();
+
+  const [projectName, setProjectName] = useState(state?.project_name);
+  const [projectDescription, setProjectDescription] = useState(state?.project_description);
 
   useEffect(() => {
     async function fetchData() {
-      const issuesData = await fakeAPI.get_issues(projectId);
-      setIssues(issuesData);
+      try {
+        const res = await fetch(`/api/projects/${project_id}/issues`);
+        if(res.ok) {
+          let issuesData = await res.json();
+          setIssues(issuesData);
+        }
+      }
+      catch(err) {
+        console.error(err);
+      }
     }
     fetchData();
-  }, [projectId]);
+    async function getProjectInfo() {
+      const res = await fetch(`/api/projects/${project_id}`);
+      if (res.ok) {
+        let projectInfo = await res.json();
+        setProjectName(projectInfo.project_name);
+        setProjectDescription(projectInfo.project_description);
+      }
+    }
+    if (!state) {
+      getProjectInfo();
+    }
+  }, [project_id, state]);
 
   const closeViewModalHandler = () => {setShowViewModal(false)};
   const closeCreateModalHandler = () => {setShowCreateModal(false)};
@@ -46,8 +69,8 @@ export default function Projects() {
     <>
       <Flex justify={'space-between'} px={6} pt={8} mb={-4}>
         <Flex direction={'column'}>
-          <Heading as={'h1'} size={'md'} mb={2}>ExampleProject1</Heading>
-          <p>We are going to build something amazing!</p>
+          <Heading as={'h1'} size={'md'} mb={2}>{projectName}</Heading>
+          <p>{projectDescription}</p>
         </Flex>
         <Button
           variant={'solid'}

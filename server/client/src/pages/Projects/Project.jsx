@@ -15,7 +15,7 @@ export function Project({
   const navigate = useNavigate();
 
   const viewIssueHandler = (e) => {
-    navigate(`/app/project/${project_id}`);
+    navigate(`/app/project/${project_id}`, { state: { project_name, project_description }});
   };
 
   const editProjectHandler = (e) => {
