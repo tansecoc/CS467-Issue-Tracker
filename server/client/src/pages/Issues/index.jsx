@@ -137,8 +137,8 @@ export default function Projects() {
           New Issue
         </Button>
       </Flex>
-      <Table data={issues} showModalHandler={showViewModalHandler}></Table>
-      {showViewModal ? <ViewIssueModal issueInfo={issueInfo} removeIssue={removeIssue} closeModalHandler={closeViewModalHandler} showEditModalHandler={showEditModalHandler} /> : null}
+      <Table data={issues} editIssueHandler={editIssueHandler} showModalHandler={showViewModalHandler}></Table>
+      {showViewModal ? <ViewIssueModal issueInfo={issueInfo} removeIssue={removeIssue} closeModalHandler={closeViewModalHandler} editIssueHandler={editIssueHandler} showEditModalHandler={showEditModalHandler} /> : null}
       {showCreateModal ? <CreateIssueModal addIssue={addIssue} closeModalHandler={closeCreateModalHandler} /> : null}
       {showEditModal ? <EditIssueModal issueInfo={issueInfo} editIssueHandler={editIssueHandler} closeModalHandler={closeEditModalHandler}  /> : null}
     </>

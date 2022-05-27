@@ -11,8 +11,9 @@ import {
 } from '@chakra-ui/react';
 
 import DeleteConfirmation from './DeleteConfirmation';
+import { StatusChange } from '../../components/StatusChange';
 
-export default function ViewIssueDetails({ issueInfo, removeIssue, closeModalHandler, showEditModalHandler }) {
+export default function ViewIssueDetails({ issueInfo, removeIssue, closeModalHandler, editIssueHandler, showEditModalHandler }) {
   const { 
     issue_id, 
     issue_type, 
@@ -85,6 +86,10 @@ export default function ViewIssueDetails({ issueInfo, removeIssue, closeModalHan
           <Flex grow={0} my={2}>
             <FormLabel htmlFor='title' textAlign={'right'} w={75}>Title</FormLabel>
             <Text><strong>{issue_name}</strong></Text>
+          </Flex>
+          <Flex grow={0} my={2}>
+            <FormLabel htmlFor='status' textAlign={'right'} w={75}>Title</FormLabel>
+            <StatusChange issue={issueInfo} changeHandler={editIssueHandler} />
           </Flex>
           <Flex grow={0} my={2}>
             <FormLabel htmlFor='type' textAlign={'right'} w={75}>Type</FormLabel>

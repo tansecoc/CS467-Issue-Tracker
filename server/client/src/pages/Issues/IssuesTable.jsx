@@ -4,7 +4,7 @@ import { ArrowUpDownIcon } from '@chakra-ui/icons';
 import { useSort } from '../../utils/useSort';
 import { Issue } from './Issue';
 
-export function IssuesTable({ data, showModalHandler }) {
+export function IssuesTable({ data, editIssueHandler, showModalHandler }) {
   const [issues, sortBy] = useSort(data);
 
   return (
@@ -21,7 +21,7 @@ export function IssuesTable({ data, showModalHandler }) {
           </Tr>
         </Thead>
         <Tbody>
-          {issues.data.map(issue => <Issue key={issue.issue_id} {...issue} showModalHandler={showModalHandler} />)}
+          {issues.data.map(issue => <Issue key={issue.issue_id} issue={issue} editIssueHandler={editIssueHandler} showModalHandler={showModalHandler} />)}
         </Tbody>
       </Table>
     </TableContainer>
