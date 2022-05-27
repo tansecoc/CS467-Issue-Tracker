@@ -18,7 +18,7 @@ export function Project({
 
   const editIssueHandler = (e) => {
     e.stopPropagation();
-    showEditModalHandler({project_name, project_description});
+    showEditModalHandler({project_id, project_name, project_description});
   }
 
   return (

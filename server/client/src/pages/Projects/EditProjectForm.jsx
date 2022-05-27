@@ -10,9 +10,23 @@ import {
   useColorModeValue,
 } from '@chakra-ui/react';
 
-export default function EditProjectForm({ projectInfo = {name: '', description: ''}, closeModalHandler }) {
-  const [nameInput, setNameInput] = useState(projectInfo.name);
-  const [descriptionInput, setDescriptionInput] = useState(projectInfo.description);
+export default function EditProjectForm({ projectInfo, updateProject, closeModalHandler }) {
+  const [nameInput, setNameInput] = useState(projectInfo.project_name);
+  const [descriptionInput, setDescriptionInput] = useState(projectInfo.project_description);
+
+  const editProjectHandler = async () => {
+    let res = await fetch(`/api/projects/${projectInfo.project_id}`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({project_name: nameInput, project_description: descriptionInput}),
+    });
+    if (res.ok) {
+      updateProject({project_id: projectInfo.project_id, project_name: nameInput, project_description: descriptionInput});
+      closeModalHandler();
+    }
+  }
 
   return (
     <Flex
@@ -73,7 +87,7 @@ export default function EditProjectForm({ projectInfo = {name: '', description: 
             }}
             flex={1}
             ml={2}
-            onClick={(() => {console.log(`name: ${nameInput}, desc: ${descriptionInput}`)})}>
+            onClick={editProjectHandler}>
            Save 
           </Button>
         </Flex>
