@@ -20,7 +20,7 @@ export function ProjectsTable({ data, showEditModalHandler }) {
           </Tr>
         </Thead>
         <Tbody>
-          {projects.data.map(project => <Project key={project.id} {...project} showEditModalHandler={showEditModalHandler} />)}
+          {projects.data.map(project => <Project key={project.project_id} {...project} showEditModalHandler={showEditModalHandler} />)}
         </Tbody>
       </Table>
     </TableContainer>

@@ -3,7 +3,6 @@ import { Heading, Button, Flex } from '@chakra-ui/react'
 import { AddIcon } from '@chakra-ui/icons';
 
 import { ProjectsTable as Table } from './ProjectsTable';
-import { fakeAPI } from '../../auth/fakeAPI';
 import { CreateProjectModal } from './CreateProjectModal';
 import { EditProjectModal } from './EditProjectModal';
 
@@ -15,7 +14,8 @@ export default function Projects() {
 
   useEffect(() => {
     async function fetchData() {
-      const projects = await fakeAPI.get_projects();
+      const res = await fetch('/api/projects');
+      const projects = await res.json();
       setProjects(projects);
     }
     fetchData();
@@ -27,6 +27,10 @@ export default function Projects() {
     setProjectInfo({name, description});
     setShowEditModal(true);
   };
+
+  const addProject = (newProject) => {
+    setProjects(prev => ([...prev, newProject]));
+  }
   
   return (
     <>
@@ -43,7 +47,7 @@ export default function Projects() {
         </Button>
       </Flex>
       <Table data={projects} showEditModalHandler={showEditModalHandler}></Table>
-      {showCreateModal ? <CreateProjectModal closeModalHandler={closeCreateModalHandler} /> : null}
+      {showCreateModal ? <CreateProjectModal addProject={addProject} closeModalHandler={closeCreateModalHandler} /> : null}
       {showEditModal ? <EditProjectModal projectInfo={projectInfo} closeModalHandler={closeEditModalHandler}  /> : null}
     </>
   );

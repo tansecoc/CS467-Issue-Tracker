@@ -10,9 +10,18 @@ import {
   useColorModeValue,
 } from '@chakra-ui/react';
 
-export default function CreateProjectForm({ closeModalHandler }) {
+import { postData } from '../../utils/postData';
+
+export default function CreateProjectForm({ addProject, closeModalHandler }) {
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
+  
+  const createProjectHandler = () => {
+    let newProject = { project_name: name, project_description: description };
+    postData('/api/projects', newProject);
+    addProject(newProject);
+    closeModalHandler();
+  };
 
   return (
     <Flex
@@ -73,7 +82,7 @@ export default function CreateProjectForm({ closeModalHandler }) {
             }}
             flex={1}
             ml={2}
-            onClick={(() => {console.log(`name: ${name}, desc: ${description}`)})}>
+            onClick={createProjectHandler}>
             Create Project
           </Button>
         </Flex>
