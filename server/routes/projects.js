@@ -17,9 +17,20 @@ async function createOrg(pool, project_name, project_description, user_id, org_i
 
 // Gets all projects within an organization
 async function getProjects(pool, org_id) {
-    return await pool.select().from("projects").where({
+    let projects = await pool.select().from("projects").where({
         org_id: org_id
     });
+    let newProjects = projects.map(async project => {
+        let open_count = await pool.select().from("issues").where({
+            project_id: project.project_id
+        }).whereNot('issue_status', 'Done').count();
+        let closed_count = await pool.select().from("issues").where({
+            project_id: project.project_id
+        }).where('issue_status', 'Done').count();
+        return { ...project, open_count: open_count[0].count, closed_count: closed_count[0].count };
+    });
+    const results = await Promise.all(newProjects);
+    return results;
 }
 
 // Gets all issues within a project

@@ -7,8 +7,8 @@ export function Project({
   project_id,
   project_name,
   project_description,
-  openIssues,
-  closedIssues,
+  open_count,
+  closed_count,
   removeProject,
   showEditModalHandler
 }) {
@@ -43,8 +43,8 @@ export function Project({
     <Tr cursor="pointer" _hover={{backgroundColor: 'gray.300'}} onClick={viewIssueHandler}>
       <Td>{project_name}</Td>
       <Td>{project_description}</Td>
-      <Td isNumeric>{openIssues}</Td>
-      <Td isNumeric>{closedIssues}</Td>
+      <Td isNumeric>{open_count}</Td>
+      <Td isNumeric>{closed_count}</Td>
       <Td isNumeric onClick={(e) => e.stopPropagation()}>
         <Button mx={2} onClick={editProjectHandler}>Edit</Button>
         <DeleteButton project_name={project_name} deleteHandler={deleteProjectHandler} /> 
