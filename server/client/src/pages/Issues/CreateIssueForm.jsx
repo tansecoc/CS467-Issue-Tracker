@@ -13,9 +13,23 @@ import {
   useColorModeValue,
 } from '@chakra-ui/react';
 
-export default function CreateIssueForm({ closeModalHandler }) {
-  const [name, setName] = useState("");
-  const [description, setDescription] = useState("");
+export default function CreateIssueForm({ addIssue, closeModalHandler }) {
+  const [newIssue, setNewIssue] = useState({ issue_status: 'Open' });
+
+  const inputHandler = (key) => {
+    return (e) => {
+      setNewIssue(prev => {
+        let newIssue = {...prev};
+        newIssue[key] = e.target.value;
+        return newIssue;
+      })
+    };
+  } 
+
+  const createIssueHandler = () => {
+    addIssue(newIssue);
+    console.log(newIssue);
+  }
 
   return (
     <Flex
@@ -39,62 +53,65 @@ export default function CreateIssueForm({ closeModalHandler }) {
         </Text>
         <FormControl id="org">
             <Flex alignItems="center" mb={4} grow={0}>
-              <FormLabel htmlFor='type' textAlign={'right'} w={75}>Type</FormLabel>
-              <Select id='type' w={100}>
+              <FormLabel htmlFor='issue_type' textAlign={'right'} w={75}>Type</FormLabel>
+              <Select id='issue_type' w={100} value={newIssue.issue_type}
+                onChange={inputHandler('issue_type')} placeholder="Type">
                 <option>Task</option>
                 <option>Bug</option>
               </Select>
             </Flex>
             <Flex alignItems={'center'} mt={4}>
               <FormLabel htmlFor='priority' textAlign={'right'} w={75}>Priority</FormLabel>
-              <Select id='priority' w={100}>
+              <Select id='issue_priority' w={100} value={newIssue.issue_priority}
+                onChange={inputHandler('issue_priority')} placeholder="Priority">
                 <option>Low</option>
                 <option>Med</option>
                 <option>High</option>
               </Select>
             </Flex>
             <Flex alignItems={'center'} mt={2} grow={0}>
-              <FormLabel htmlFor='title' textAlign={'right'} w={75}>Title</FormLabel>
+              <FormLabel htmlFor='issue_name' textAlign={'right'} w={75}>Title</FormLabel>
               <Input
-                id='title'
+                id='issue_name'
                 placeholder="Issue Title"
                 _placeholder={{ color: 'gray.500' }}
                 type="text"
                 my={2}
                 w={300}
-                value={name}
-                onChange={(e) => {setName(e.target.value)}}
+                value={newIssue.issue_name}
+                onChange={inputHandler('issue_name')}
               />
             </Flex>
             <Flex alignItems={'start'} grow={0}>
-              <FormLabel htmlFor='summary' textAlign={'right'} w={75} mt={3}>Summary</FormLabel>
+              <FormLabel htmlFor='issue_description' textAlign={'right'} w={75} mt={3}>Summary</FormLabel>
               <Textarea
-                id='summary'
+                id='issue_description'
                 placeholder="Issue Description"
                 _placeholder={{ color: 'gray.500' }}
                 type="text-area"
                 my={2}
                 w={300}
-                value={name}
-                onChange={(e) => {setName(e.target.value)}}
+                value={newIssue.issue_desription}
+                onChange={inputHandler('issue_description')}
               />
             </Flex>
             <Flex alignItems={'center'} mb={2} grow={0}>
-              <FormLabel htmlFor='due-date' textAlign={'right'} w={75}>Due Date</FormLabel>
+              <FormLabel htmlFor='issue_due_date' textAlign={'right'} w={75}>Due Date</FormLabel>
               <Input
-                id='due-date'
+                id='issue_due_date'
                 _placeholder={{ color: 'gray.500' }}
                 type="date"
                 my={2}
                 w={150}
-                value={description}
-                onChange={(e) => {setDescription(e.target.value)}}
+                value={newIssue.issue_due_date}
+                onChange={inputHandler('issue_due_date')}
               />
             </Flex> 
             <Flex alignItems={'center'} my={2} grow={0}>
-              <FormLabel htmlFor='assignee' textAlign={'right'} w={75}>Assign To</FormLabel>
-              <Select id='assignee' placeholder='Select Assignee' mb={2} w={200}>
-                <option>Kevin Gilpin</option>
+              <FormLabel htmlFor='issue_assignee_email' textAlign={'right'} w={75}>Assign To</FormLabel>
+              <Select id='issue_assignee_email' placeholder='Select Assignee' mb={2} w={200} value={newIssue.issue_assignee_email}
+                onChange={inputHandler('issue_assignee_email')}>
+                <option>kevin.gilpin@gmail.com</option>
                 <option>Kevin Peralta</option>
                 <option>Casimero Tanseco</option>
               </Select>
@@ -120,7 +137,7 @@ export default function CreateIssueForm({ closeModalHandler }) {
             }}
             flex={1}
             ml={2}
-            onClick={(() => {console.log(`name: ${name}, desc: ${description}`)})}>
+            onClick={createIssueHandler}>
             Create Issue
           </Button>
         </Flex>

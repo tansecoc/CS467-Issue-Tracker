@@ -21,7 +21,7 @@ export function IssuesTable({ data, showModalHandler }) {
           </Tr>
         </Thead>
         <Tbody>
-          {issues.data.map(issue => <Issue key={issue.id} {...issue} showModalHandler={showModalHandler} />)}
+          {issues.data.map(issue => <Issue key={issue.issue_id} {...issue} showModalHandler={showModalHandler} />)}
         </Tbody>
       </Table>
     </TableContainer>

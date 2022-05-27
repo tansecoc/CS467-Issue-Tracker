@@ -12,18 +12,49 @@ import {
 
 import DeleteConfirmation from './DeleteConfirmation';
 
-export default function ViewIssueDetails({ issueInfo: {type, priority, title, summary, dueDate, assignee}, closeModalHandler, showEditModalHandler }) {
+export default function ViewIssueDetails({ issueInfo, removeIssue, closeModalHandler, showEditModalHandler }) {
+  const { 
+    issue_id, 
+    issue_type, 
+    issue_priority, 
+    issue_status,
+    issue_name, 
+    issue_description, 
+    issue_due_date,
+    issue_assignee_id,
+    issue_assignee_first_name,
+    issue_assignee_last_name,
+    issue_assignee_email 
+  } = issueInfo;
+
   const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false);
 
   const colorValue = useColorModeValue('white', 'gray.700');
 
   const cancelHandler = () => setShowDeleteConfirmation(false);
-  const deleteHandler = () => {
-    console.log('DELETE!')
-    closeModalHandler();
+
+  const deleteHandler = async () => {
+    try {
+      let res = await fetch(`/api/issues/${issue_id}`, {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'aplication/json'
+        }
+      });
+      if (res.ok) {
+        removeIssue(issue_id);
+        closeModalHandler();
+      }
+      else {
+        console.error('Unable to delete');
+      }
+    }
+    catch(err) {
+      console.error(err);
+    }
   }
 
-  return showDeleteConfirmation ? <DeleteConfirmation title={title} cancelHandler={cancelHandler} deleteHandler={deleteHandler} /> : (
+  return showDeleteConfirmation ? <DeleteConfirmation issueInfo={issueInfo} cancelHandler={cancelHandler} deleteHandler={deleteHandler} /> : (
     <Flex
       onClick={(e) => {e.stopPropagation()}}
       align={'center'}
@@ -53,27 +84,27 @@ export default function ViewIssueDetails({ issueInfo: {type, priority, title, su
         <FormControl id="issue">
           <Flex grow={0} my={2}>
             <FormLabel htmlFor='title' textAlign={'right'} w={75}>Title</FormLabel>
-            <Text><strong>{title}</strong></Text>
+            <Text><strong>{issue_name}</strong></Text>
           </Flex>
           <Flex grow={0} my={2}>
             <FormLabel htmlFor='type' textAlign={'right'} w={75}>Type</FormLabel>
-            <Text>{type}</Text>
+            <Text>{issue_type}</Text>
           </Flex>
           <Flex my={2}>
             <FormLabel htmlFor='priority' textAlign={'right'} w={75}>Priority</FormLabel>
-            <Text>{priority}</Text>
+            <Text>{issue_priority}</Text>
           </Flex>
           <Flex grow={0} my={2}>
             <FormLabel htmlFor='summary' textAlign={'right'} w={75}>Summary</FormLabel>
-            <Text w={250} overflowWrap>{summary}</Text>
+            <Text w={250} overflowWrap>{issue_description}</Text>
           </Flex>
           <Flex grow={0} my={2}>
             <FormLabel htmlFor='due-date' textAlign={'right'} w={75}>Due Date</FormLabel>
-            <Text>{dueDate}</Text>
+            <Text>{issue_due_date.split('T')[0]}</Text>
           </Flex> 
           <Flex grow={0} my={2}>
             <FormLabel htmlFor='assignee' textAlign={'right'} w={75}>Assign To</FormLabel>
-            <Text>{assignee}</Text>
+            <Text>{`${issue_assignee_first_name} ${issue_assignee_last_name}`}</Text>
           </Flex> 
         </FormControl>
         <Flex>

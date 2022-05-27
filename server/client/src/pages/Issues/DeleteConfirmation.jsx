@@ -7,7 +7,7 @@ import {
   useColorModeValue,
 } from '@chakra-ui/react';
 
-export default function DeleteConfirmation({ title, cancelHandler, deleteHandler }) {
+export default function DeleteConfirmation({ issueInfo, cancelHandler, deleteHandler }) {
   return (
     <Flex
       onClick={(e) => {e.stopPropagation()}}
@@ -27,7 +27,7 @@ export default function DeleteConfirmation({ title, cancelHandler, deleteHandler
         <Text
           fontSize={{ base: 'sm', sm: 'md' }}
           color={useColorModeValue('gray.800', 'gray.400')}>
-          Deleting <strong>{title}</strong> is permanent and cannot be undone.
+          Deleting <strong>{issueInfo.issue_name}</strong> is permanent and cannot be undone.
         </Text>
         <Flex>
           <Button

@@ -86,7 +86,7 @@ router.post('/', async (req, res) => {
                             {project_id: projectID, issue_creator_id: issueCreatorID, issue_name: issueName, issue_assignee_id: result.user_id, issue_create_date: issueCreateDate, issue_type: issueType, issue_priority: issuePriority, issue_status: issueStatus, issue_due_date: issueDueDate, issue_description: issueDescription}
                         )
                         .then(result => {
-                            res.status(201).send(true).end()
+                            res.status(201).send(result).end()
                         })
                     } else{
                         res.status(404).send(false).end()

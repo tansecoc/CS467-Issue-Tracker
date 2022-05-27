@@ -24,8 +24,10 @@ async function getProjects(pool, org_id) {
 
 // Gets all issues within a project
 async function getIssues(pool, project_id) {
-    return await pool.select().from('issues').where({
+    return await pool.select(['issues.*', {issue_assignee_id: 'users.user_id'}, { issue_assignee_first_name: 'users.user_first_name' }, { issue_assignee_last_name: 'users.user_last_name' }, { issue_assignee_email: 'users.user_email' }]).from('issues').where({
         project_id: project_id
+    }).join('users', {
+        'users.user_id': 'issues.issue_creator_id'
     });
 }
 
@@ -33,7 +35,7 @@ async function getIssues(pool, project_id) {
 async function getOrgID(pool, project_id) {
     return await pool.select('org_id').from('projects').where({
         project_id: project_id
-    })
+    });
 }
 
 // Gets a projects's name and description for a given id

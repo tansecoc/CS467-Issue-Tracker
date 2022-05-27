@@ -3,6 +3,8 @@ import { useParams, useLocation } from 'react-router-dom';
 import { Heading, Button, Flex } from '@chakra-ui/react'
 import { AddIcon } from '@chakra-ui/icons';
 
+import { postData } from '../../utils/postData';
+
 import { IssuesTable as Table } from './IssuesTable';
 import { ViewIssueModal } from './ViewIssueModal';
 import { CreateIssueModal } from './CreateIssueModal';
@@ -13,8 +15,7 @@ export default function Projects() {
   const [showViewModal, setShowViewModal] = useState(false);
   const [showCreateModal, setShowCreateModal] = useState(false);
   const [showEditModal, setShowEditModal] = useState(false);
-  const [issueInfo, setIssueInfo] = useState({type: null, priority: null, title: null, summary: null, dueDate: null, assignee: null});
-  
+  const [issueInfo, setIssueInfo] = useState({issue_id: null, issue_type: null, issue_priority: null, issue_status: null, issue_name: null, issue_description: null, issue_due_date: null, issue_assignee_email: null});
 
   const params = useParams();
   const project_id = params.id;
@@ -53,8 +54,8 @@ export default function Projects() {
   const closeViewModalHandler = () => {setShowViewModal(false)};
   const closeCreateModalHandler = () => {setShowCreateModal(false)};
   const closeEditModalHandler = () => {setShowEditModal(false)};
-  const showViewModalHandler = ({type, priority, title, summary, dueDate, assignee}) => {
-    setIssueInfo({type, priority, title, summary, dueDate, assignee});
+  const showViewModalHandler = (issueInfo) => {
+    setIssueInfo(issueInfo);
     setShowCreateModal(false);
     setShowEditModal(false);
     setShowViewModal(true);
@@ -64,6 +65,44 @@ export default function Projects() {
     setShowViewModal(false);
     setShowEditModal(true);
   };
+
+  const addIssue = async (newIssue) => {
+    try {
+      let res = await postData(`/api/issues`, { project_id, ...newIssue });
+      if(res) {
+        try {
+          const res = await fetch(`/api/projects/${project_id}/issues`);
+          if(res.ok) {
+            let issuesData = await res.json();
+            setIssues(issuesData);
+          }
+        }
+        catch(err) {
+          console.error(err);
+        }
+      }
+      closeCreateModalHandler();
+    }
+    catch(err) {
+      console.error(err);
+    }
+  }
+
+  const updateIssue = (newInfo) => {
+    setIssues(prev => {
+      return prev.map(project => {
+        if (project.project_id === newInfo.project_id) {
+          project.project_name = newInfo.project_name;
+          project.project_description = newInfo.project_description;
+        }
+        return project;
+      });
+    })
+  }
+
+  const removeIssue = (issue_id) => {
+    setIssues(prev => prev.filter(issue => issue.issue_id !== issue_id));
+  }
   
   return (
     <>
@@ -83,8 +122,8 @@ export default function Projects() {
         </Button>
       </Flex>
       <Table data={issues} showModalHandler={showViewModalHandler}></Table>
-      {showViewModal ? <ViewIssueModal issueInfo={issueInfo} closeModalHandler={closeViewModalHandler} showEditModalHandler={showEditModalHandler} /> : null}
-      {showCreateModal ? <CreateIssueModal closeModalHandler={closeCreateModalHandler} /> : null}
+      {showViewModal ? <ViewIssueModal issueInfo={issueInfo} removeIssue={removeIssue} closeModalHandler={closeViewModalHandler} showEditModalHandler={showEditModalHandler} /> : null}
+      {showCreateModal ? <CreateIssueModal addIssue={addIssue} closeModalHandler={closeCreateModalHandler} /> : null}
       {showEditModal ? <EditIssueModal issueInfo={issueInfo} closeModalHandler={closeEditModalHandler}  /> : null}
     </>
   )
