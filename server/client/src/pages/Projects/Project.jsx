@@ -1,5 +1,7 @@
-import { Tr, Td, Link } from '@chakra-ui/react';
+import { Tr, Td, Button } from '@chakra-ui/react';
 import { useNavigate } from 'react-router-dom';
+
+import { DeleteButton } from './DeleteButton';
 
 export function Project({
   project_id,
@@ -7,18 +9,34 @@ export function Project({
   project_description,
   openIssues,
   closedIssues,
+  removeProject,
   showEditModalHandler
 }) {
-
   const navigate = useNavigate();
 
   const viewIssueHandler = (e) => {
     navigate(`/app/project/${project_id}`);
   };
 
-  const editIssueHandler = (e) => {
+  const editProjectHandler = (e) => {
     e.stopPropagation();
     showEditModalHandler({project_id, project_name, project_description});
+  }
+
+  const deleteProjectHandler = async (e) => {
+    e.stopPropagation();
+    let res = await fetch(`/api/projects/${project_id}`, {
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    });
+    if (res.ok) {
+      removeProject(project_id);
+    }
+    else {
+      console.error('Failed to delete project');
+    }
   }
 
   return (
@@ -27,11 +45,10 @@ export function Project({
       <Td>{project_description}</Td>
       <Td isNumeric>{openIssues}</Td>
       <Td isNumeric>{closedIssues}</Td>
-      <Td isNumeric color={'teal'} fontWeight={'500'}><Link _hover={{fontWeight: '600', textDecoration: 'underline'}} onClick={editIssueHandler}>Edit</Link></Td>
-      {/* <Td isNumeric>
-        <Button mx={2}>Edit</Button>
-        <Button>Delete</Button>
-      </Td> */}
+      <Td isNumeric onClick={(e) => e.stopPropagation()}>
+        <Button mx={2} onClick={editProjectHandler}>Edit</Button>
+        <DeleteButton project_name={project_name} deleteHandler={deleteProjectHandler} /> 
+      </Td>
     </Tr>
   );
 }

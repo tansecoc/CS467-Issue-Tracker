@@ -43,6 +43,10 @@ export default function Projects() {
       });
     })
   }
+
+  const removeProject = (project_id) => {
+    setProjects(prev => prev.filter(project => project.project_id !== project_id));
+  }
   
   return (
     <>
@@ -58,7 +62,7 @@ export default function Projects() {
           New Project
         </Button>
       </Flex>
-      <Table data={projects} showEditModalHandler={showEditModalHandler}></Table>
+      <Table data={projects} removeProject={removeProject} showEditModalHandler={showEditModalHandler}></Table>
       {showCreateModal ? <CreateProjectModal addProject={addProject} closeModalHandler={closeCreateModalHandler} /> : null}
       {showEditModal ? <EditProjectModal projectInfo={projectInfo} updateProject={updateProject} closeModalHandler={closeEditModalHandler}  /> : null}
     </>
