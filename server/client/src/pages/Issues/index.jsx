@@ -88,16 +88,32 @@ export default function Projects() {
     }
   }
 
-  const updateIssue = (newInfo) => {
-    setIssues(prev => {
-      return prev.map(project => {
-        if (project.project_id === newInfo.project_id) {
-          project.project_name = newInfo.project_name;
-          project.project_description = newInfo.project_description;
-        }
-        return project;
+  const editIssueHandler = async (newInfo) => {
+    try {
+      let res = await fetch(`/api/issues/${newInfo.issue_id}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(newInfo)
       });
-    })
+      if (res.ok) {
+        setIssues(prev => {
+          return prev.map(issue => {
+            if (issue.issue_id === newInfo.issue_id) {
+              return newInfo;
+            }
+            return issue;
+          });
+        });
+      } else {
+        console.error('Unable to update');
+      }
+      closeEditModalHandler();
+    }
+    catch(err) {
+      console.error(err);
+    }
   }
 
   const removeIssue = (issue_id) => {
@@ -124,7 +140,7 @@ export default function Projects() {
       <Table data={issues} showModalHandler={showViewModalHandler}></Table>
       {showViewModal ? <ViewIssueModal issueInfo={issueInfo} removeIssue={removeIssue} closeModalHandler={closeViewModalHandler} showEditModalHandler={showEditModalHandler} /> : null}
       {showCreateModal ? <CreateIssueModal addIssue={addIssue} closeModalHandler={closeCreateModalHandler} /> : null}
-      {showEditModal ? <EditIssueModal issueInfo={issueInfo} closeModalHandler={closeEditModalHandler}  /> : null}
+      {showEditModal ? <EditIssueModal issueInfo={issueInfo} editIssueHandler={editIssueHandler} closeModalHandler={closeEditModalHandler}  /> : null}
     </>
   )
 }

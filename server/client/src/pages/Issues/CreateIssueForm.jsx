@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import {
   Button,
   FormControl,
@@ -15,6 +15,23 @@ import {
 
 export default function CreateIssueForm({ addIssue, closeModalHandler }) {
   const [newIssue, setNewIssue] = useState({ issue_status: 'Open' });
+  const [members, setMembers] = useState([]);
+
+  useEffect(() => {
+    async function fetchData() {
+      try {
+        const res = await fetch('/api/orgs/users');
+        if (res.ok) {
+          let membersData = await res.json();
+          setMembers(membersData);
+        }
+      }
+      catch(err) {
+        console.error(err);
+      }
+    }
+    fetchData();
+  }, []);
 
   const inputHandler = (key) => {
     return (e) => {
@@ -111,9 +128,7 @@ export default function CreateIssueForm({ addIssue, closeModalHandler }) {
               <FormLabel htmlFor='issue_assignee_email' textAlign={'right'} w={75}>Assign To</FormLabel>
               <Select id='issue_assignee_email' placeholder='Select Assignee' mb={2} w={200} value={newIssue.issue_assignee_email}
                 onChange={inputHandler('issue_assignee_email')}>
-                <option>kevin.gilpin@gmail.com</option>
-                <option>Kevin Peralta</option>
-                <option>Casimero Tanseco</option>
+                {members.map(member => <option id={member.user_id} first_name={member.user_first_name} last_name={member.user_last_name} value={member.user_email}>{`${member.user_first_name} ${member.user_last_name} (${member.user_email})`}</option>)}
               </Select>
             </Flex> 
         </FormControl>

@@ -18,7 +18,13 @@ export default function Projects() {
       const projects = await res.json();
       setProjects(projects);
     }
-    fetchData();
+
+    try {
+      fetchData();
+    }
+    catch(err) {
+      console.error(err);
+    }
   }, []);
 
   const closeCreateModalHandler = () => {setShowCreateModal(false)};
@@ -29,7 +35,18 @@ export default function Projects() {
   };
 
   const addProject = (newProject) => {
-    setProjects(prev => ([...prev, newProject]));
+    async function fetchData() {
+      const res = await fetch('/api/projects');
+      const projects = await res.json();
+      setProjects(projects);
+    }
+
+    try {
+      fetchData();
+    }
+    catch(err) {
+      console.error(err);
+    }
   }
 
   const updateProject = (newInfo) => {

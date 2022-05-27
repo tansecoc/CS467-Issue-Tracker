@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import {
   Button,
   FormControl,
@@ -13,8 +13,26 @@ import {
   useColorModeValue,
 } from '@chakra-ui/react';
 
-export default function CreateIssueForm({ issueInfo: {type, priority, title, summary, dueDate, assignee}, closeModalHandler }) {
-  const [input, setInput] = useState({type, priority, title, summary, dueDate, assignee});
+export default function CreateIssueForm({ issueInfo, editIssueHandler, closeModalHandler }) {
+  const [input, setInput] = useState(issueInfo);
+
+  const [members, setMembers] = useState([]);
+
+  useEffect(() => {
+    async function fetchData() {
+      try {
+        const res = await fetch('/api/orgs/users');
+        if (res.ok) {
+          let membersData = await res.json();
+          setMembers(membersData);
+        }
+      }
+      catch(err) {
+        console.error(err);
+      }
+    }
+    fetchData();
+  }, []);
 
   const inputHandlerFactory = (key) => {
     return (e) => {
@@ -49,14 +67,14 @@ export default function CreateIssueForm({ issueInfo: {type, priority, title, sum
         <FormControl id="issue">
             <Flex alignItems="center" mb={4} grow={0}>
               <FormLabel htmlFor='type' textAlign={'right'} w={75}>Type</FormLabel>
-              <Select id='type' w={100} value={input.type} onChange={inputHandlerFactory('type')}>
+              <Select id='type' w={100} value={input.issue_type} onChange={inputHandlerFactory('issue_type')}>
                 <option>Task</option>
                 <option>Bug</option>
               </Select>
             </Flex>
             <Flex alignItems={'center'} mt={4}>
               <FormLabel htmlFor='priority' textAlign={'right'} w={75}>Priority</FormLabel>
-              <Select id='priority' w={100} value={input.priority} onChange={inputHandlerFactory('priority')}>
+              <Select id='priority' w={100} value={input.issue_priority} onChange={inputHandlerFactory('issue_priority')}>
                 <option>Low</option>
                 <option>Med</option>
                 <option>High</option>
@@ -71,8 +89,8 @@ export default function CreateIssueForm({ issueInfo: {type, priority, title, sum
                 type="text"
                 my={2}
                 w={300}
-                value={input.title}
-                onChange={inputHandlerFactory('title')}
+                value={input.issue_name}
+                onChange={inputHandlerFactory('issue_name')}
               />
             </Flex>
             <Flex alignItems={'start'} grow={0}>
@@ -84,8 +102,8 @@ export default function CreateIssueForm({ issueInfo: {type, priority, title, sum
                 type="text-area"
                 my={2}
                 w={300}
-                value={input.summary}
-                onChange={inputHandlerFactory('summary')}
+                value={input.issue_description}
+                onChange={inputHandlerFactory('issue_description')}
               />
             </Flex>
             <Flex alignItems={'center'} mb={2} grow={0}>
@@ -96,8 +114,8 @@ export default function CreateIssueForm({ issueInfo: {type, priority, title, sum
                 type="date"
                 my={2}
                 w={150}
-                value={input.dueDate}
-                onChange={inputHandlerFactory('dueDate')}
+                value={input.issue_due_date.split('T')[0]}
+                onChange={inputHandlerFactory('issue_due_date')}
               />
             </Flex> 
             <Flex alignItems={'center'} my={2} grow={0}>
@@ -107,11 +125,9 @@ export default function CreateIssueForm({ issueInfo: {type, priority, title, sum
                 placeholder='Select Assignee' 
                 mb={2} 
                 w={200} 
-                value={input.assignee}
-                onChange={inputHandlerFactory('assignee')}>
-                  <option>Kevin Gilpin</option>
-                  <option>Kevin Peralta</option>
-                  <option>Casimero Tanseco</option>
+                value={input.issue_assignee_email}
+                onChange={inputHandlerFactory('issue_assignee_email')}>
+                  {members.map(member => <option id={member.user_id} value={member.user_email}>{`${member.user_first_name} ${member.user_last_name} (${member.user_email})`}</option>)}
               </Select>
             </Flex> 
         </FormControl>
@@ -135,7 +151,7 @@ export default function CreateIssueForm({ issueInfo: {type, priority, title, sum
             }}
             flex={1}
             ml={2}
-            onClick={(() => {console.log(`name: ${title}, desc: ${summary}`)})}>
+            onClick={(() => {editIssueHandler(input)})}>
             Save
           </Button>
         </Flex>

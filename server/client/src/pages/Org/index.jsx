@@ -17,9 +17,16 @@ export default function Projects() {
 
   useEffect(() => {
     async function fetchData() {
-      const res = await fetch('/api/orgs/users');
-      let membersData = await res.json();
-      setMembers(membersData);
+      try {
+        const res = await fetch('/api/orgs/users');
+        if (res.ok) {
+          let membersData = await res.json();
+          setMembers(membersData);
+        }
+      }
+      catch(err) {
+        console.error(err);
+      }
     }
     fetchData();
   }, []);
