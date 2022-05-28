@@ -25,17 +25,22 @@ export function Project({
 
   const deleteProjectHandler = async (e) => {
     e.stopPropagation();
-    let res = await fetch(`/api/projects/${project_id}`, {
-      method: 'DELETE',
-      headers: {
-        'Content-Type': 'application/json'
+    try {
+      let res = await fetch(`/api/projects/${project_id}`, {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      });
+      if (res.ok) {
+        removeProject(project_id);
       }
-    });
-    if (res.ok) {
-      removeProject(project_id);
+      else {
+        console.error('Failed to delete project');
+      }
     }
-    else {
-      console.error('Failed to delete project');
+    catch(err) {
+      console.error(err);
     }
   }
 

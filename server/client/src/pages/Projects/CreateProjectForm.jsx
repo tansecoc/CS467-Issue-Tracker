@@ -16,9 +16,14 @@ export default function CreateProjectForm({ addProject, closeModalHandler }) {
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
   
-  const createProjectHandler = () => {
+  const createProjectHandler = async () => {
     let newProject = { project_name: name, project_description: description };
-    postData('/api/projects', newProject);
+    try {
+      await postData('/api/projects', newProject);
+    }
+    catch(err) {
+      console.error(err);
+    }
     addProject(newProject);
     closeModalHandler();
   };
