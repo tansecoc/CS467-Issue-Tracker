@@ -88,8 +88,8 @@ export default function ViewIssueDetails({ issueInfo, removeIssue, closeModalHan
             <Text><strong>{issue_name}</strong></Text>
           </Flex>
           <Flex grow={0} my={2}>
-            <FormLabel htmlFor='status' textAlign={'right'} w={75}>Title</FormLabel>
-            <StatusChange issue={issueInfo} changeHandler={editIssueHandler} />
+            <FormLabel htmlFor='status' textAlign={'right'} w={75}>Status</FormLabel>
+            <Text>{issue_status}</Text>
           </Flex>
           <Flex grow={0} my={2}>
             <FormLabel htmlFor='type' textAlign={'right'} w={75}>Type</FormLabel>
