@@ -8,6 +8,7 @@ import {
   Stack,
   Text,
   useColorModeValue,
+  FormErrorMessage
 } from '@chakra-ui/react';
 
 import { postData } from '../../utils/postData';
@@ -15,8 +16,15 @@ import { postData } from '../../utils/postData';
 export default function CreateProjectForm({ addProject, closeModalHandler }) {
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
+
+  const [isError, setIsError] = useState(false);
   
   const createProjectHandler = async () => {
+    if(name === '' || description === '') {
+      setIsError(true);
+      return;
+    }
+
     let newProject = { project_name: name, project_description: description };
     try {
       await postData('/api/projects', newProject);
@@ -49,7 +57,7 @@ export default function CreateProjectForm({ addProject, closeModalHandler }) {
           color={useColorModeValue('gray.800', 'gray.400')}>
           Tell others a little bit about the project.
         </Text>
-        <FormControl id="org">
+        <FormControl id="org" isInvalid={isError}>
           <Input
             placeholder="Project name"
             _placeholder={{ color: 'gray.500' }}
@@ -66,6 +74,7 @@ export default function CreateProjectForm({ addProject, closeModalHandler }) {
             value={description}
             onChange={(e) => {setDescription(e.target.value)}}
           />
+          <FormErrorMessage>Name and Description are required.</FormErrorMessage>
         </FormControl>
         <Flex>
           <Button
