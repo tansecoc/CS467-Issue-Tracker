@@ -75,7 +75,7 @@ export function Issue({
         <StatusChange issue={issue} changeHandler={editIssueHandler} />
       </Td>
       <Td>{issue_name}</Td>
-      <Td isNumeric>{issue_due_date.split('T')[0]}</Td>
+      <Td isNumeric>{issue_due_date?.split('T')[0]}</Td>
     </Tr>
   );
 }
