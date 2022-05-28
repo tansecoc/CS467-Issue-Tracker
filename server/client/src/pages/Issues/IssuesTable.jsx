@@ -1,4 +1,4 @@
-import { TableContainer, Table, Thead, Tbody, Tr, Th } from "@chakra-ui/react";
+import { TableContainer, Table, Thead, Tbody, Tr, Th, Flex, Heading } from "@chakra-ui/react";
 import { ArrowUpDownIcon } from '@chakra-ui/icons';
 
 import { useSort } from '../../utils/useSort';

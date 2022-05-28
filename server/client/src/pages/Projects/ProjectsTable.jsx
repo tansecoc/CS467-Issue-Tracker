@@ -1,4 +1,4 @@
-import { TableContainer, Table, Thead, Tbody, Tr, Th } from "@chakra-ui/react";
+import { TableContainer, Table, Thead, Tbody, Tr, Th, Flex, Heading } from "@chakra-ui/react";
 import { ArrowUpDownIcon } from '@chakra-ui/icons'
 
 import { useSort } from '../../utils/useSort';
@@ -20,7 +20,7 @@ export function ProjectsTable({ data, removeProject, showEditModalHandler }) {
           </Tr>
         </Thead>
         <Tbody>
-          {projects.data.map(project => <Project key={project.project_id} {...project} removeProject={removeProject} showEditModalHandler={showEditModalHandler} />)}
+          { projects.data.map(project => <Project key={project.project_id} {...project} removeProject={removeProject} showEditModalHandler={showEditModalHandler} />)}
         </Tbody>
       </Table>
     </TableContainer>

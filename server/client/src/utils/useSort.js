@@ -8,6 +8,7 @@ export function useSort(data) {
   }, [data])
 
   function sortBy(key) {
+    if( issues.data === null || issues.data || undefined || issues.length <= 0) return;
     setIssues((prev) => {
       let newIssues = [...prev.data];
       if (prev.sortedBy === key) {
