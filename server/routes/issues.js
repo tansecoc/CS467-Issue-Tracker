@@ -10,6 +10,17 @@ async function getUserInfo(pool, user_email) {
     return userData[0];
 }
 
+// Gets all issues from user_id
+async function getUserIssues(pool, user_id) {
+    return await pool.select(['issues.*', 'projects.project_name', {issue_assignee_id: 'users.user_id'}, { issue_assignee_first_name: 'users.user_first_name' }, { issue_assignee_last_name: 'users.user_last_name' }, { issue_assignee_email: 'users.user_email' }]).from('issues').where({
+        issue_assignee_id: user_id
+    }).join('users', {
+        'users.user_id': 'issues.issue_assignee_id'
+    }).join('projects', {
+        'projects.project_id': 'issues.project_id'
+    });
+}
+
 // Gets issue from issue_id
 async function getIssue(pool, issue_id){
     let issueData = await pool.select().from('issues').where('issue_id', issue_id);
@@ -50,6 +61,26 @@ async function isInOrg(pool, issue_id, org_id){
 
 
 /* ------------- Begin Controller Functions ------------- */
+
+// Gets a list of all issues assigned to user
+router.get('/', async (req, res) => {
+    try {
+        if (req.isAuthenticated()) {
+            try {
+                result = await getUserIssues(pool, req.user.user_id);
+                res.status(200).send(result).end();
+            } catch (error) {
+                console.log(error);
+                res.status(400).send(false).end();
+            }
+        } else {
+            res.status(401).send(false).end();
+        }
+    } catch (error) {
+        console.log(error);
+        res.status(500).send(false).end();
+    }
+})
 
 // Creates a new issue
 router.post('/', async (req, res) => {
