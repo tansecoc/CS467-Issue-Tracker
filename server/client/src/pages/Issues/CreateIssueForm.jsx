@@ -11,11 +11,13 @@ import {
   Stack,
   Text,
   useColorModeValue,
+  FormErrorMessage
 } from '@chakra-ui/react';
 
 export default function CreateIssueForm({ addIssue, closeModalHandler }) {
-  const [newIssue, setNewIssue] = useState({ issue_status: 'Open' });
+  const [newIssue, setNewIssue] = useState({ issue_type: null, issue_priority: null, issue_title: null, issue_desription: null, issue_due_date: null, issue_assignee_email: null, issue_status: 'Open' });
   const [members, setMembers] = useState([]);
+  const [isError, setIsError] = useState(false);
 
   useEffect(() => {
     async function fetchData() {
@@ -44,8 +46,19 @@ export default function CreateIssueForm({ addIssue, closeModalHandler }) {
   } 
 
   const createIssueHandler = () => {
-    addIssue(newIssue);
-    console.log(newIssue);
+    if (validateForm(newIssue)) {
+      addIssue(newIssue);
+    }
+  }
+
+  const validateForm = (formData) => {
+    for (let field in formData) {
+      if ( formData[field] === '' || formData[field] === null) {
+        setIsError(true);
+        return false;
+      }
+    }
+    return true;
   }
 
   return (
@@ -68,7 +81,7 @@ export default function CreateIssueForm({ addIssue, closeModalHandler }) {
           color={useColorModeValue('gray.800', 'gray.400')}>
           Tell others a little bit about this issue.
         </Text>
-        <FormControl id="org">
+        <FormControl id="org" isInvalid={isError}>
             <Flex alignItems="center" mb={4} grow={0}>
               <FormLabel htmlFor='issue_type' textAlign={'right'} w={75}>Type</FormLabel>
               <Select id='issue_type' w={100} value={newIssue.issue_type}
@@ -131,6 +144,7 @@ export default function CreateIssueForm({ addIssue, closeModalHandler }) {
                 {members.map(member => <option id={member.user_id} first_name={member.user_first_name} last_name={member.user_last_name} value={member.user_email}>{`${member.user_first_name} ${member.user_last_name} (${member.user_email})`}</option>)}
               </Select>
             </Flex> 
+            <FormErrorMessage>All fields are required.</FormErrorMessage>
         </FormControl>
         <Flex>
           <Button

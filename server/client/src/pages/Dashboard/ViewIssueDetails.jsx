@@ -11,7 +11,6 @@ import {
 } from '@chakra-ui/react';
 
 import DeleteConfirmation from './DeleteConfirmation';
-import { StatusChange } from '../../components/StatusChange';
 
 export default function ViewIssueDetails({ issueInfo, removeIssue, closeModalHandler, editIssueHandler, showEditModalHandler }) {
   const { 

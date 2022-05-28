@@ -8,16 +8,18 @@ export function useSort(data) {
   }, [data])
 
   function sortBy(key) {
-    if( issues.data === null || issues.data || undefined || issues.length <= 0) return;
+    if (!(issues.data?.length > 0)){
+      return;
+    }
     setIssues((prev) => {
       let newIssues = [...prev.data];
       if (prev.sortedBy === key) {
         newIssues.reverse();
         return { data: newIssues, sortedBy: key, isReversed: !prev.isReversed};
       } else {
-        if (key === 'priority') {
-          let priorityToNum = (priority) => {
-            switch(priority) {
+        if (key === 'issue_priority') {
+          let priorityToNum = (issue_priority) => {
+            switch(issue_priority) {
               case 'High':
                 return 3;
               case 'Med':

@@ -1,4 +1,4 @@
-import { TableContainer, Table, Thead, Tbody, Tr, Th, Flex, Heading } from "@chakra-ui/react";
+import { TableContainer, Table, Thead, Tbody, Tr, Th } from "@chakra-ui/react";
 import { ArrowUpDownIcon } from '@chakra-ui/icons';
 
 import { useSort } from '../../utils/useSort';
@@ -12,12 +12,12 @@ export function IssuesTable({ data, editIssueHandler, showModalHandler }) {
       <Table variant='simple'>
         <Thead>
           <Tr>
-            <Th onClick={() => sortBy('title')} cursor="pointer">Project <ArrowUpDownIcon /></Th>
-            <Th onClick={() => sortBy('type')} cursor="pointer">Type <ArrowUpDownIcon /></Th>
-            <Th onClick={() => sortBy('priority')} cursor="pointer">Priority <ArrowUpDownIcon /></Th>
-            <Th onClick={() => sortBy('status')} cursor="pointer">Status <ArrowUpDownIcon /></Th>
-            <Th onClick={() => sortBy('title')} cursor="pointer">Title <ArrowUpDownIcon /></Th>
-            <Th onClick={() => sortBy('dueDate')} cursor="pointer" isNumeric>Due Date <ArrowUpDownIcon /></Th>
+            <Th onClick={() => sortBy('project_name')} cursor="pointer">Project <ArrowUpDownIcon /></Th>
+            <Th onClick={() => sortBy('issue_type')} cursor="pointer">Type <ArrowUpDownIcon /></Th>
+            <Th onClick={() => sortBy('issue_priority')} cursor="pointer">Priority <ArrowUpDownIcon /></Th>
+            <Th onClick={() => sortBy('issue_status')} cursor="pointer">Status <ArrowUpDownIcon /></Th>
+            <Th onClick={() => sortBy('issue_name')} cursor="pointer">Title <ArrowUpDownIcon /></Th>
+            <Th onClick={() => sortBy('issue_due_date')} cursor="pointer" isNumeric>Due Date <ArrowUpDownIcon /></Th>
           </Tr>
         </Thead>
         <Tbody>

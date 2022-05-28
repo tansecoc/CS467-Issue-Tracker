@@ -1,4 +1,4 @@
-import { Tr, Td, Icon, Select } from '@chakra-ui/react';
+import { Tr, Td, Icon } from '@chakra-ui/react';
 import { WarningIcon, CheckCircleIcon, ArrowDownIcon, ArrowUpIcon } from '@chakra-ui/icons'
 import { FiChevronsUp } from 'react-icons/fi';
 
