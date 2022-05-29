@@ -11,12 +11,13 @@ import {
   Stack,
   Text,
   useColorModeValue,
+  FormErrorMessage
 } from '@chakra-ui/react';
 
-export default function CreateIssueForm({ issueInfo, editIssueHandler, closeModalHandler }) {
+export default function CreateIssueForm({ issueInfo, editIssue, closeModalHandler }) {
   const [input, setInput] = useState(issueInfo);
-
   const [members, setMembers] = useState([]);
+  const [isError, setIsError] = useState(false);
 
   useEffect(() => {
     async function fetchData() {
@@ -44,6 +45,22 @@ export default function CreateIssueForm({ issueInfo, editIssueHandler, closeModa
     };
   }
 
+  const validateForm = (formData) => {
+    for (let field in formData) {
+      if ( formData[field] === '' || formData[field] === null) {
+        setIsError(true);
+        return false;
+      }
+    }
+    return true;
+  }
+
+  const editIssueHandler = (input) => {
+    if (validateForm(input)) {
+      editIssue(input);
+    }
+  }
+
   return (
     <Flex
       onClick={(e) => {e.stopPropagation()}}
@@ -64,7 +81,7 @@ export default function CreateIssueForm({ issueInfo, editIssueHandler, closeModa
           color={useColorModeValue('gray.800', 'gray.400')}>
           Update issue information.
         </Text>
-        <FormControl id="issue">
+        <FormControl id="issue" isInvalid={isError}>
             <Flex alignItems="center" mb={4} grow={0}>
               <FormLabel htmlFor='type' textAlign={'right'} w={75}>Type</FormLabel>
               <Select id='type' w={100} value={input.issue_type} onChange={inputHandlerFactory('issue_type')}>
@@ -130,6 +147,7 @@ export default function CreateIssueForm({ issueInfo, editIssueHandler, closeModa
                   {members.map(member => <option id={member.user_id} value={member.user_email}>{`${member.user_first_name} ${member.user_last_name} (${member.user_email})`}</option>)}
               </Select>
             </Flex> 
+            <FormErrorMessage>All fields are required.</FormErrorMessage>
         </FormControl>
         <Flex>
           <Button

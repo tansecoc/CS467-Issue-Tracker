@@ -88,7 +88,7 @@ export default function Projects() {
     }
   }
 
-  const editIssueHandler = async (newInfo) => {
+  const editIssue = async (newInfo) => {
     try {
       let res = await fetch(`/api/issues/${newInfo.issue_id}`, {
         method: 'PUT',
@@ -137,10 +137,10 @@ export default function Projects() {
           New Issue
         </Button>
       </Flex>
-      <Table data={issues} editIssueHandler={editIssueHandler} showModalHandler={showViewModalHandler}></Table>
-      {showViewModal ? <ViewIssueModal issueInfo={issueInfo} removeIssue={removeIssue} closeModalHandler={closeViewModalHandler} editIssueHandler={editIssueHandler} showEditModalHandler={showEditModalHandler} /> : null}
+      <Table data={issues} editIssueHandler={editIssue} showModalHandler={showViewModalHandler}></Table>
+      {showViewModal ? <ViewIssueModal issueInfo={issueInfo} removeIssue={removeIssue} closeModalHandler={closeViewModalHandler} editIssueHandler={editIssue} showEditModalHandler={showEditModalHandler} /> : null}
       {showCreateModal ? <CreateIssueModal addIssue={addIssue} closeModalHandler={closeCreateModalHandler} /> : null}
-      {showEditModal ? <EditIssueModal issueInfo={issueInfo} editIssueHandler={editIssueHandler} closeModalHandler={closeEditModalHandler}  /> : null}
+      {showEditModal ? <EditIssueModal issueInfo={issueInfo} editIssue={editIssue} closeModalHandler={closeEditModalHandler}  /> : null}
     </>
   )
 }
