@@ -25,6 +25,7 @@ router.post('/', async (req, res) => {
         let lastName = req.body.lastName
         let email = req.body.email;
         let password = req.body.password;
+        
 
         // Checks if all fields of form are filled out
         if (firstName && lastName && email && password){
@@ -33,7 +34,10 @@ router.post('/', async (req, res) => {
                     {user_first_name: firstName, user_last_name: lastName, user_email: email, user_password_hash: hash}
                 )
                 .then(result => {
-                    res.status(201).send(true).end()
+                    req.body.username = email;
+                    passport.authenticate('local')(req, res, function () {
+                        res.status(201).send(true).end()
+                    });
                 })
             })
         } else {
