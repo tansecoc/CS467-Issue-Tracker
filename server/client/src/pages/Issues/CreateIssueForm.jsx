@@ -15,7 +15,7 @@ import {
 } from '@chakra-ui/react';
 
 export default function CreateIssueForm({ addIssue, closeModalHandler }) {
-  const [newIssue, setNewIssue] = useState({ issue_type: null, issue_priority: null, issue_title: null, issue_desription: null, issue_due_date: null, issue_assignee_email: null, issue_status: 'Open' });
+  const [newIssue, setNewIssue] = useState({ issue_type: null, issue_priority: null, issue_name: null, issue_description: null, issue_due_date: null, issue_assignee_email: null, issue_status: 'Open' });
   const [members, setMembers] = useState([]);
   const [isError, setIsError] = useState(false);
 
