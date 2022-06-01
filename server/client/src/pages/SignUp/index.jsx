@@ -12,6 +12,7 @@ import {
   Heading,
   Text,
   useColorModeValue,
+  FormErrorMessage,
 } from '@chakra-ui/react';
 import { useState } from 'react';
 import { ViewIcon, ViewOffIcon } from '@chakra-ui/icons';
@@ -31,12 +32,13 @@ export default function SignUp() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
+  const [isError, setIsError] = useState(false);
 
   function validateForm() {
     return email.length > 0 && password.length > 0;
   }
 
-  function handleSubmit(event) {
+  async function handleSubmit(event) {
     event.preventDefault();
 
     if (!validateForm()) {
@@ -44,7 +46,7 @@ export default function SignUp() {
       return;
     }
 
-    auth.signup({firstName, lastName, email, password}, () => {
+    let success = await auth.signup({firstName, lastName, email, password}, () => {
       // Send them back to the page they tried to visit when they were
       // redirected to the login page. Use { replace: true } so we don't create
       // another entry in the history stack for the login page.  This means that
@@ -53,6 +55,10 @@ export default function SignUp() {
       // user experience.
       navigate(from, { replace: true });
     });
+
+    if (!success) {
+      setIsError(true);
+    }
   }
   
   return (
@@ -93,9 +99,10 @@ export default function SignUp() {
                 </Box>
               </HStack>
 
-              <FormControl id="email" isRequired>
+              <FormControl id="email" isRequired isInvalid={isError}>
                 <FormLabel>Email address</FormLabel>
                 <Input type="email" value={email} onChange={(e) => setEmail(e.target.value)} />
+                <FormErrorMessage>This email is already in use.</FormErrorMessage>
               </FormControl>
 
               <FormControl id="password" isRequired>

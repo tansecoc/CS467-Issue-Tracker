@@ -39,6 +39,9 @@ router.post('/', async (req, res) => {
                         res.status(201).send(true).end()
                     });
                 })
+                .catch(err => {
+                    res.status(400).send(err);
+                })
             })
         } else {
             res.status(400).send(false).end();
